@@ -8,18 +8,14 @@ var app         = express();
 mongoose.connect(config.database); //Crossing my fingers here
 app.set('gina_secret', config.secret); 
 
-//Basically Login
-//Returns JWT for further use sometime
+//////////////////////////////
+// LOGIN / AUTH
+//RETURNS JWT for Session
+//////////////////////////////
 apiRoutes.post('/authenticate', function(req, res) {
-    
-      // find the user
-      User.findOne({
-        name: req.body.name
-      }, function(err, user) {
-    
+      User.findOne({name: req.body.name}, function(err, user) {
         if (err) 
             throw err;
-    
         if (!user) {
           res.json({ success: false, message: 'Student does not EXIST, sorry.' });
         } 
@@ -29,15 +25,15 @@ apiRoutes.post('/authenticate', function(req, res) {
                     throw err;
                 if(isMatch){
                     const payload = {
-                        name: user.name
+                        user
                       };
                           var token = jwt.sign(payload, app.get('gina_secret'), {expiresIn: '10h'
                           });
-                          // return the information including token as JSON
                           res.json({
                             success: true,
                             message: user.name,
-                            token: token
+                            token: token,
+                            user: payload
                           });
                 }
                 else{
@@ -51,8 +47,11 @@ apiRoutes.post('/authenticate', function(req, res) {
       });
     });
 
-//Register Route
-    apiRoutes.post('/register', function(req, res){
+//////////////////////////////
+// REGISTER 
+// REGISTERS USER IF THEY DON'T EXIST
+//////////////////////////////
+apiRoutes.post('/register', function(req, res){
         var new_user;
         /**
          * Implmement this after testing is done so i'm not frustrated and shit
@@ -79,7 +78,6 @@ apiRoutes.post('/authenticate', function(req, res) {
                     } else {
                         res.send("Student already present");
                     }
-        
                 }
             })
          }
@@ -95,7 +93,8 @@ apiRoutes.post('/authenticate', function(req, res) {
                     var new_user = new User({
                         name: req.body.name,
                         password: req.body.password,
-                        major: req.body.major,
+                        department: req.body.department,
+                        phone: req.body.phone,
                         friends: []
                     });
                     new_user.save(function(err){
@@ -104,17 +103,21 @@ apiRoutes.post('/authenticate', function(req, res) {
                         else{
                             res.json({ 
                                 success:true,
-                                message: new_user});
+                                user: new_user,
+                                message: "Successful Creation"});
                         }
                     });
-             
                 } else {
                     res.send("Student already present");
                 }
             }
         })
     });
-    
+
+//////////////////////////////
+// GET PROFILE 
+// IF USER HAS TOKEN, THEN GET USER INFO
+//////////////////////////////
 apiRoutes.get('/profile/:id', function(req, res){
     var token = req.headers['x-access-token'];
     if(token){
@@ -124,10 +127,11 @@ apiRoutes.get('/profile/:id', function(req, res){
                     message: 'Failed to authenticate token.' 
                 });   
             } 
-            if(decoded.name == req.params.id){
+            if(decoded.user.name == req.params.id){
                 return res.json({
                     success:true,
-                    message: decoded.name
+                    message: decoded.user.name,
+                    user: decoded
                 })
             }
             else {
@@ -137,20 +141,28 @@ apiRoutes.get('/profile/:id', function(req, res){
                 })
             }
         })      
-    }
-    
+    } 
 });
-
+//////////////////////////////
+// ????????
+//////////////////////////////
 apiRoutes.get('/', function(req, res) {
   res.json({ message: 'Kevin Tran Default Testing Route localhost:8080/api/' });
 });
-
+//////////////////////////////
+// GET LIST OF ALL USERS
+// JSON OF ALL USERS BACK
+//////////////////////////////
 apiRoutes.get('/users', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
 });  
 
+//////////////////////////////
+// ADD FRIEND/ GET FOLLOWER
+// FINDS FOLLOWER VIA ID, THEN IF NOT FOLLOWING WILL
+//////////////////////////////
 apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
     var token = req.headers['x-access-token'];
     if(token){
@@ -160,7 +172,7 @@ apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
                     message: 'Failed to authenticate token.' 
                 });   
             } 
-            if(decoded.name == req.params.id){
+            if(decoded.user.name == req.params.id){
                 User.findOne({name: req.params.f_id}, function(err, friend) {
                     var _friend = friend;
                     if(err){
@@ -185,7 +197,7 @@ apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
                             if(err)
                                 throw err;
                             else{
-                                return res.json({ success: false, 
+                                return res.json({ success: true, 
                                     message: user 
                                 }); 
                             }

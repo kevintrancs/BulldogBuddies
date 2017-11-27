@@ -18,6 +18,7 @@ import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
@@ -100,9 +101,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
 
         RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
 
-        User user = new User();
-        user.setName(username);
-        user.setPassword(password);
+        User user = new User(username, password, null, null );
 
         Call<ServerResponse> response = requestInterface.authUser(user);
 
@@ -114,11 +113,12 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
                 progress.setVisibility(View.INVISIBLE);
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
-
+                Gson gson = new Gson();
+                String json = gson.toJson(resp.getuser());
+                editor.putString("myUser", json);
                 editor.putString("myName", resp.getMessage());
                 editor.putString("myToken", resp.getjsonToken());
                 editor.commit();
-
 
                 if(!resp.getSuccess()){
                     Snackbar.make(getView(), "Something is wrong my friend.", Snackbar.LENGTH_LONG).show();

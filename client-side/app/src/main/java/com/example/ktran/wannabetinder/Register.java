@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
@@ -29,7 +30,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Register extends android.app.Fragment implements View.OnClickListener {
 
     private AppCompatButton btn_register;
-    private EditText et_password,et_name;
+    private EditText et_password,et_name, et_phone;
+    private Spinner mySpinner;
     private TextView tv_login;
     private ProgressBar progress;
 
@@ -47,6 +49,8 @@ public class Register extends android.app.Fragment implements View.OnClickListen
         tv_login = (TextView)view.findViewById(R.id.tv_login);
         et_name = (EditText)view.findViewById(R.id.et_name);
         et_password = (EditText)view.findViewById(R.id.et_password);
+        et_phone = (EditText) view.findViewById(R.id.et_phone);
+        mySpinner = view.findViewById(R.id.spinner);
         progress = (ProgressBar)view.findViewById(R.id.progress);
 
         btn_register.setOnClickListener(this);
@@ -65,14 +69,16 @@ public class Register extends android.app.Fragment implements View.OnClickListen
 
                 String name = et_name.getText().toString();
                 String password = et_password.getText().toString();
+                String department = mySpinner.getSelectedItem().toString();
+                String phone = et_phone.getText().toString();
                 progress.setVisibility(View.VISIBLE);
-                registerProcess(name, password);
+                registerProcess(name, password, department, phone);
                 break;
         }
 
     }
 
-    private void registerProcess(String name,String password){
+    private void registerProcess(String name, String password, String department, String phone){
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -85,10 +91,7 @@ public class Register extends android.app.Fragment implements View.OnClickListen
 
         RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
 
-        User user = new User();
-        user.setName(name);
-        user.setPassword(password);
-
+        User user = new User(name, password, department, phone);
 
         Call<ServerResponse> response = requestInterface.registerUser(user);
 
@@ -105,7 +108,6 @@ public class Register extends android.app.Fragment implements View.OnClickListen
                     Snackbar.make(getView(), "Something is wrongs", Snackbar.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
 
