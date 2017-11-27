@@ -1,4 +1,5 @@
 
+
 var express     = require('express');
 var app         = express();
 var bodyParser  = require('body-parser');
@@ -18,7 +19,6 @@ app.use(bodyParser.json());
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 var bcrypt = require('bcrypt');
-const saltRounds = 10;
 //---------------------------------------------
 // API ROUTES 
 // Didn't feel like different module for routers, maybe sometime in the future 
@@ -41,12 +41,14 @@ apiRoutes.post('/authenticate', function(req, res) {
           res.json({ success: false, message: 'Student does not EXIST, sorry.' });
         } 
         else if (user) {
-            bcrypt.compare(user.password, hash, function(err, res) {
-                if(res){
+            user.comparePassword(req.body.password, function(err, isMatch) {
+                if (err) 
+                    throw err;
+                if(isMatch){
                     const payload = {
                         name: user.name
                       };
-                          var token = jwt.sign(payload, app.get('gina_secret'), {expiresIn: '10h' //a week???
+                          var token = jwt.sign(payload, app.get('gina_secret'), {expiresIn: '10h'
                           });
                           // return the information including token as JSON
                           res.json({
@@ -56,9 +58,12 @@ apiRoutes.post('/authenticate', function(req, res) {
                           });
                 }
                 else{
-                    res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+                    res.json({
+                        success:false,
+                        message: 'Failure to authenticate'
+                    });
                 }
-            });  
+            });
         }
       });
     });
@@ -104,32 +109,24 @@ apiRoutes.post('/authenticate', function(req, res) {
             else {
                 console.log(success);
                 if (success == null) {
-                    bcrypt.genSalt(saltRounds, function(err, salt) {
-                        bcrypt.hash(req.body.password, salt, function(err, hash) {
-                            if(err)
-                                res.send(err);
-                            else{
-                                new_user = new User({
-                                name: req.body.name,
-                                password: hash
-                            });
-                            }
-                        });
+                    var new_user = new User({
+                        name: req.body.name,
+                        password: req.body.password,
+                        friends: []
                     });
-
                     new_user.save(function(err){
-                        if(err)
+                        if (err) 
                             throw err;
-                        res.json({
-                            success: true,
-                            message: 'Created user ' + req.body.name
-                        });
+                        else{
+                            res.json({ 
+                                success:true,
+                                message: new_user});
+                        }
                     });
-    
+             
                 } else {
                     res.send("Student already present");
                 }
-    
             }
         })
     });
