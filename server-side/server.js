@@ -1,10 +1,10 @@
 
+
 var express     = require('express');
 var app         = express();
 var bodyParser  = require('body-parser');
 var morgan      = require('morgan');
 var mongoose    = require('mongoose');
-var bcrypt = require('bcrypt');
 var jwt    = require('jsonwebtoken'); 
 var config = require('./config');
 var User   = require('./models/user'); 
@@ -18,8 +18,7 @@ app.use(bodyParser.json());
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
-var salt = bcrypt.genSaltSync(10);
-
+var bcrypt = require('bcrypt');
 //---------------------------------------------
 // API ROUTES 
 // Didn't feel like different module for routers, maybe sometime in the future 
@@ -42,37 +41,36 @@ apiRoutes.post('/authenticate', function(req, res) {
           res.json({ success: false, message: 'Student does not EXIST, sorry.' });
         } 
         else if (user) {
-          // check if password matches
-          if (user.password != bcrypt.hashSync(req.body.password, salt)) {
-            res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-          } else {
-        // if user is found and password is right
-        // create a token with only our given payload
-        const payload = {
-          name: user.name
-        };
-            var token = jwt.sign(payload, app.get('gina_secret'), {expiresIn: 3600 //a week???
+            user.comparePassword(req.body.password, function(err, isMatch) {
+                if (err) 
+                    throw err;
+                if(isMatch){
+                    const payload = {
+                        name: user.name
+                      };
+                          var token = jwt.sign(payload, app.get('gina_secret'), {expiresIn: '10h'
+                          });
+                          // return the information including token as JSON
+                          res.json({
+                            success: true,
+                            message: user.name,
+                            token: token
+                          });
+                }
+                else{
+                    res.json({
+                        success:false,
+                        message: 'Failure to authenticate'
+                    });
+                }
             });
-            // return the information including token as JSON
-            res.json({
-              success: true,
-              message: user.name,
-              token: token
-            });
-          }   
         }
       });
     });
 
 //Register Route
     apiRoutes.post('/register', function(req, res){
-
-        var passwordToSave = bcrypt.hashSync(req.body.password, salt) //crypt this pass
-        //Creating new user here fam
-        var new_user = new User({
-            name: req.body.name,
-            password: passwordToSave
-        });
+        var new_user;
         /**
          * Implmement this after testing is done so i'm not frustrated and shit
          
@@ -111,19 +109,24 @@ apiRoutes.post('/authenticate', function(req, res) {
             else {
                 console.log(success);
                 if (success == null) {
-                    new_user.save(function(err){
-                        if(err)
-                            throw err;
-                        res.json({
-                            success: true,
-                            message: 'Created user ' + req.body.name
-                        });
+                    var new_user = new User({
+                        name: req.body.name,
+                        password: req.body.password,
+                        friends: []
                     });
-    
+                    new_user.save(function(err){
+                        if (err) 
+                            throw err;
+                        else{
+                            res.json({ 
+                                success:true,
+                                message: new_user});
+                        }
+                    });
+             
                 } else {
                     res.send("Student already present");
                 }
-    
             }
         })
     });
