@@ -3,11 +3,11 @@ var bcrypt = require('bcrypt')
 var Schema = mongoose.Schema;
 SALT_WORK_FACTOR = 10;
 
-
 var UserSchema = new Schema({
     name: String, 
     password: String,
-    major: String,
+    department: String,
+    phone: String,
     friends: [{ type: Schema.Types.ObjectId, ref: 'User'}]
 });
 
@@ -42,5 +42,3 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 
 module.exports = mongoose.model('User', UserSchema, 'gina_users');
-
-// set up a mongoose model and pass it using module.exports

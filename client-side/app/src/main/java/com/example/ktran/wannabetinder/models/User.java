@@ -6,6 +6,19 @@ package com.example.ktran.wannabetinder.models;
 
 public class User {
 
+    private String name;
+    private String password;
+    private String department;
+    private String phone;
+    private String[] friends;
+
+    public User(String name, String password, String department, String phone) {
+        this.name = name;
+        this.password = password;
+        this.department = department;
+        this.phone = phone;
+    }
+
     public String getName() {
         return name;
     }
@@ -14,10 +27,27 @@ public class User {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    private String name;
-    private String password;
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

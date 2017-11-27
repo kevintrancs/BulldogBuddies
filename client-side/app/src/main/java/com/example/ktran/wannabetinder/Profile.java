@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
+import com.example.ktran.wannabetinder.models.User;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +31,7 @@ public class Profile extends AppCompatActivity{
     private SharedPreferences mSharedPreferences;
     private String mToken;
     private String mName;
+    private User mUser;
     private TextView tv_name;
     private TextView tv_token;
 
@@ -49,6 +52,9 @@ public class Profile extends AppCompatActivity{
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString("myName", "");
                 editor.putString("myToken", "");
+                Gson gson = new Gson();
+                String json = mSharedPreferences.getString("myUser", "");
+                mUser = gson.fromJson(json, User.class);
                 editor.apply();
                 finish();
             }
@@ -61,6 +67,8 @@ public class Profile extends AppCompatActivity{
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mName = mSharedPreferences.getString("myName","");
         mToken = mSharedPreferences.getString("myToken","");
+        mToken = mSharedPreferences.getString("myToken","");
+
 
     }
 

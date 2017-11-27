@@ -13,9 +13,7 @@ app.set('gina_secret', config.secret);
 //RETURNS JWT for Session
 //////////////////////////////
 apiRoutes.post('/authenticate', function(req, res) {
-      // find the user
-      User.findOne({
-        name: req.body.name}, function(err, user) {
+      User.findOne({name: req.body.name}, function(err, user) {
         if (err) 
             throw err;
         if (!user) {
@@ -27,15 +25,15 @@ apiRoutes.post('/authenticate', function(req, res) {
                     throw err;
                 if(isMatch){
                     const payload = {
-                        name: user.name
+                        user
                       };
                           var token = jwt.sign(payload, app.get('gina_secret'), {expiresIn: '10h'
                           });
-                          // return the information including token as JSON
                           res.json({
                             success: true,
                             message: user.name,
-                            token: token
+                            token: token,
+                            user: payload
                           });
                 }
                 else{
@@ -48,6 +46,7 @@ apiRoutes.post('/authenticate', function(req, res) {
         }
       });
     });
+
 //////////////////////////////
 // REGISTER 
 // REGISTERS USER IF THEY DON'T EXIST
@@ -79,7 +78,6 @@ apiRoutes.post('/register', function(req, res){
                     } else {
                         res.send("Student already present");
                     }
-        
                 }
             })
          }
@@ -95,7 +93,8 @@ apiRoutes.post('/register', function(req, res){
                     var new_user = new User({
                         name: req.body.name,
                         password: req.body.password,
-                        major: req.body.major,
+                        department: req.body.department,
+                        phone: req.body.phone,
                         friends: []
                     });
                     new_user.save(function(err){
@@ -104,16 +103,17 @@ apiRoutes.post('/register', function(req, res){
                         else{
                             res.json({ 
                                 success:true,
-                                message: new_user});
+                                user: new_user,
+                                message: "Successful Creation"});
                         }
                     });
-             
                 } else {
                     res.send("Student already present");
                 }
             }
         })
     });
+
 //////////////////////////////
 // GET PROFILE 
 // IF USER HAS TOKEN, THEN GET USER INFO
@@ -127,10 +127,11 @@ apiRoutes.get('/profile/:id', function(req, res){
                     message: 'Failed to authenticate token.' 
                 });   
             } 
-            if(decoded.name == req.params.id){
+            if(decoded.user.name == req.params.id){
                 return res.json({
                     success:true,
-                    message: decoded.name
+                    message: decoded.user.name,
+                    user: decoded
                 })
             }
             else {
@@ -140,8 +141,7 @@ apiRoutes.get('/profile/:id', function(req, res){
                 })
             }
         })      
-    }
-    
+    } 
 });
 //////////////////////////////
 // ????????
@@ -161,7 +161,7 @@ apiRoutes.get('/users', function(req, res) {
 
 //////////////////////////////
 // ADD FRIEND/ GET FOLLOWER
-// FINDS FOLLOWER VIA ID, THEN IF NOT FOLLOWING WILL FOLLOW
+// FINDS FOLLOWER VIA ID, THEN IF NOT FOLLOWING WILL
 //////////////////////////////
 apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
     var token = req.headers['x-access-token'];
@@ -172,7 +172,7 @@ apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
                     message: 'Failed to authenticate token.' 
                 });   
             } 
-            if(decoded.name == req.params.id){
+            if(decoded.user.name == req.params.id){
                 User.findOne({name: req.params.f_id}, function(err, friend) {
                     var _friend = friend;
                     if(err){
@@ -197,7 +197,7 @@ apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
                             if(err)
                                 throw err;
                             else{
-                                return res.json({ success: false, 
+                                return res.json({ success: true, 
                                     message: user 
                                 }); 
                             }

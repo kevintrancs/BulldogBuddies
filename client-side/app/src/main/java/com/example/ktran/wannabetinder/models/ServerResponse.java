@@ -8,8 +8,9 @@ public class ServerResponse {
     private String message;
     private boolean success;
     private String token;
+    private User user;
 
-
+    public User getuser(){return user;}
     public String getMessage() {
         return message;
     }
