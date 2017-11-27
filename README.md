@@ -1,5 +1,6 @@
 # BulldogBuddies
 This is the final project for CPSC 321. 
+An android mobile that allows students in the University to connect with each other.
 
 ## Getting Started & Reqs
 Have npm and nodejs, and android studio.
