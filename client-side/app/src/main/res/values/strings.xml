@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Bulldog Buddies</string>
+    <string-array name="major_array">
+        <item>Computer Science</item>
+        <item>Not Computer Science</item>
+        <item>Not Computer Science 2</item>
+    </string-array>
+    <string name="title_activity_profile">Profile</string>
+</resources>
