@@ -112,6 +112,7 @@ apiRoutes.post('/authenticate', function(req, res) {
                     var new_user = new User({
                         name: req.body.name,
                         password: req.body.password,
+                        major: req.body.major,
                         friends: []
                     });
                     new_user.save(function(err){
@@ -165,7 +166,50 @@ apiRoutes.get('/users', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
-});   
+});  
+
+apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
+    var token = req.headers['x-access-token'];
+    if(token){
+        jwt.verify(token, app.get('gina_secret'), function(err, decoded) {  
+            if(err){
+                return res.json({ success: false, 
+                    message: 'Failed to authenticate token.' 
+                });   
+            } 
+            if(decoded.name == req.params.id){
+                User.findOne({name: req.params.f_id}, function(err, friend) {
+                    var _friend = friend;
+                    if(err){
+                        return res.json({ success: false, 
+                            message: 'Error somewhere' 
+                        }); 
+                    }
+                    else if(friend){
+                     User.findOne({name: req.params.id},function(err, user){
+                        user.friends.push(friend)
+                        user.save(function(err, results){
+                            if(err)
+                                throw err;
+                            else{
+                                return res.json({ success: false, 
+                                    message: user 
+                                }); 
+                            }
+                        });
+                     });
+                    }
+                  });
+            }
+            else {
+                return res.json({
+                    success:false,
+                    message: "I don't know how you got here, but this is not you friend."
+                })
+            }
+        })      
+    }
+  });  
 
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);

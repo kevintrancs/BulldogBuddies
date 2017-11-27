@@ -7,7 +7,8 @@ SALT_WORK_FACTOR = 10;
 var UserSchema = new Schema({
     name: String, 
     password: String,
-    friends: []
+    major: String,
+    friends: [{ type: Schema.Types.ObjectId, ref: 'User'}]
 });
 
 UserSchema.pre('save', function(next) {
@@ -38,6 +39,7 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
         cb(null, isMatch);
     });
 };
+
 
 module.exports = mongoose.model('User', UserSchema, 'gina_users');
 
