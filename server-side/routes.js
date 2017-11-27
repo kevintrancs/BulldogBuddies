@@ -8,18 +8,16 @@ var app         = express();
 mongoose.connect(config.database); //Crossing my fingers here
 app.set('gina_secret', config.secret); 
 
-//Basically Login
-//Returns JWT for further use sometime
+//////////////////////////////
+// LOGIN / AUTH
+//RETURNS JWT for Session
+//////////////////////////////
 apiRoutes.post('/authenticate', function(req, res) {
-    
       // find the user
       User.findOne({
-        name: req.body.name
-      }, function(err, user) {
-    
+        name: req.body.name}, function(err, user) {
         if (err) 
             throw err;
-    
         if (!user) {
           res.json({ success: false, message: 'Student does not EXIST, sorry.' });
         } 
@@ -50,9 +48,11 @@ apiRoutes.post('/authenticate', function(req, res) {
         }
       });
     });
-
-//Register Route
-    apiRoutes.post('/register', function(req, res){
+//////////////////////////////
+// REGISTER 
+// REGISTERS USER IF THEY DON'T EXIST
+//////////////////////////////
+apiRoutes.post('/register', function(req, res){
         var new_user;
         /**
          * Implmement this after testing is done so i'm not frustrated and shit
@@ -114,7 +114,10 @@ apiRoutes.post('/authenticate', function(req, res) {
             }
         })
     });
-    
+//////////////////////////////
+// GET PROFILE 
+// IF USER HAS TOKEN, THEN GET USER INFO
+//////////////////////////////
 apiRoutes.get('/profile/:id', function(req, res){
     var token = req.headers['x-access-token'];
     if(token){
@@ -140,17 +143,26 @@ apiRoutes.get('/profile/:id', function(req, res){
     }
     
 });
-
+//////////////////////////////
+// ????????
+//////////////////////////////
 apiRoutes.get('/', function(req, res) {
   res.json({ message: 'Kevin Tran Default Testing Route localhost:8080/api/' });
 });
-
+//////////////////////////////
+// GET LIST OF ALL USERS
+// JSON OF ALL USERS BACK
+//////////////////////////////
 apiRoutes.get('/users', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
 });  
 
+//////////////////////////////
+// ADD FRIEND/ GET FOLLOWER
+// FINDS FOLLOWER VIA ID, THEN IF NOT FOLLOWING WILL FOLLOW
+//////////////////////////////
 apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
     var token = req.headers['x-access-token'];
     if(token){
