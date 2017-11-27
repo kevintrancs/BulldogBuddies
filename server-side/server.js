@@ -186,7 +186,18 @@ apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
                         }); 
                     }
                     else if(friend){
-                     User.findOne({name: req.params.id},function(err, user){
+                     User.findOne({name: req.params.id},function(err, user){   
+                         
+                        var isInArray = user.friends.some(function (check_friend) {
+                            return check_friend.equals(friend._id);
+                        });
+
+                        if(isInArray){
+                            return res.json({ success: false, 
+                                message: "Already following" 
+                            });
+                        }
+                        else{
                         user.friends.push(friend)
                         user.save(function(err, results){
                             if(err)
@@ -197,6 +208,7 @@ apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
                                 }); 
                             }
                         });
+                    }
                      });
                     }
                   });
