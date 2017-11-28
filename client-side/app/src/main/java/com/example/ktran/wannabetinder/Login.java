@@ -19,9 +19,7 @@ import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
 import com.google.gson.Gson;
-
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +29,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by ktran on 11/26/17.
  */
-
 public class Login extends android.app.Fragment implements View.OnClickListener {
 
     private AppCompatButton btn_login;
@@ -42,45 +39,36 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.login_fragment,container,false);
         initViews(view);
         sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         return view;
     }
 
     private void initViews(View view) {
-
         btn_login = (AppCompatButton)view.findViewById(R.id.btn_login);
         tv_register = (TextView)view.findViewById(R.id.tv_register);
         et_email = (EditText)view.findViewById(R.id.et_email);
         et_password = (EditText)view.findViewById(R.id.et_password);
         progress = (ProgressBar)view.findViewById(R.id.progress);
-
         btn_login.setOnClickListener(this);
         tv_register.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
-
             case R.id.tv_register:
                 goToRegister();
                 break;
-
             case R.id.btn_login:
                 String username = et_email.getText().toString();
                 String password = et_password.getText().toString();
-
                 if (!username.isEmpty() && !password.isEmpty()) {
-
                     progress.setVisibility(View.VISIBLE);
                     loginProcess(username, password);
-
-                } else {
+                }
+                else {
 
                     Snackbar.make(getView(), "Fields are empty !", Snackbar.LENGTH_LONG).show();
                 }
@@ -92,16 +80,13 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10,TimeUnit.SECONDS).build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL).client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
-
         User user = new User(username, password, null, null );
-
         Call<ServerResponse> response = requestInterface.authUser(user);
 
         response.enqueue(new Callback<ServerResponse>() {
@@ -128,8 +113,6 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
                     startActivity(intent);
                 }
             }
-
-
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
 
@@ -139,9 +122,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
         });
     }
 
-
     private void goToRegister(){
-
         Fragment register = new Register();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame,register);

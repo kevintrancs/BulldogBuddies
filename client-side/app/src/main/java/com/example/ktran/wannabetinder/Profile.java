@@ -4,38 +4,22 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
 import com.google.gson.Gson;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -115,7 +99,6 @@ public class Profile extends AppCompatActivity{
 
             @Override
             public void onClick(View arg0) {
-
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString("myName", "");
                 editor.putString("myToken", "");
@@ -125,7 +108,6 @@ public class Profile extends AppCompatActivity{
             }
         });
     }
-
 
     private void initSharedPreferences() {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -170,6 +152,4 @@ public class Profile extends AppCompatActivity{
             }
         });
     }
-
-
 }

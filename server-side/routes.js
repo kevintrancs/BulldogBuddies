@@ -130,7 +130,7 @@ apiRoutes.get('/profile/:id', function(req, res){
             if(decoded.user.name == req.params.id){
                 return res.json({
                     success:true,
-                    message: decoded.user.name,
+                    message: "Name: " + decoded.user.name,
                     user: decoded
                 })
             }
