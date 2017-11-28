@@ -85,7 +85,6 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
                     Snackbar.make(getView(), "Fields are empty !", Snackbar.LENGTH_LONG).show();
                 }
                 break;
-
         }
     }
 

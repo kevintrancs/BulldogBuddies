@@ -22,4 +22,13 @@ public interface RetroInterfaces {
     @GET("profile/{id}")
     Call<ServerResponse> getProfile(@Header("x-access-token") String token,
                                     @Path("id") String name);
+
+    @GET("profile/{id}/{f_id}")
+    Call<ServerResponse> addFriend(@Header("x-access-token") String token,
+                                    @Path("id") String myName,
+                                    @Path("f_id") String friendName);
+
+    @GET("users")
+    Call<ServerResponse> getUsers(@Header("x-access-token") String token);
+
 }

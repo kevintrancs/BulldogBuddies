@@ -34,23 +34,46 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
                 android:text="My Profile"/>
 
             <TextView
                 android:id="@+id/token_id"
+                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="jsonToken"/>
             <TextView
                 android:id="@+id/et_email"
+                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Email"/>
+
+            <Button
+                android:id="@+id/find_users"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F19F4D"
+                android:padding="16dp"
+                android:text="Find Friends"
+                />
+            <Button
+                android:id="@+id/add_friend"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F19F4D"
+                android:padding="16dp"
+                android:text="Add Friend"
+                />
+
             <Button
                 android:id="@+id/log_out"
                 android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
                 android:layout_height="match_parent"
                 android:background="#F19F4D"
                 android:padding="16dp"

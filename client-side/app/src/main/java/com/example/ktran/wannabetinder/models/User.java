@@ -12,6 +12,11 @@ public class User {
     private String phone;
     private String[] friends;
 
+    @Override
+    public String toString() {
+        return "Name: " + this.name + " | Phone: " + this.phone + " | Department: " + this.department;
+    }
+
     public User(String name, String password, String department, String phone) {
         this.name = name;
         this.password = password;

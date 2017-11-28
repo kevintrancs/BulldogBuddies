@@ -149,13 +149,16 @@ apiRoutes.get('/profile/:id', function(req, res){
 apiRoutes.get('/', function(req, res) {
   res.json({ message: 'Kevin Tran Default Testing Route localhost:8080/api/' });
 });
+
 //////////////////////////////
 // GET LIST OF ALL USERS
 // JSON OF ALL USERS BACK
 //////////////////////////////
 apiRoutes.get('/users', function(req, res) {
-  User.find({}, function(err, users) {
-    res.json(users);
+  User.find({}, function(err, all_users) {
+    res.json({
+        success: true,
+        users: all_users});
   });
 });  
 
