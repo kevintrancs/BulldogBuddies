@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.models.Constants;
@@ -45,7 +45,7 @@ public class Profile extends AppCompatActivity{
         initSharedPreferences();
         loadProfile();
 
-        Button find_friends_btn  = findViewById(R.id.find_users);
+        ImageButton find_friends_btn  = findViewById(R.id.add_friend);
         find_friends_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -94,7 +94,7 @@ public class Profile extends AppCompatActivity{
             }
         });
 
-        Button log_out_btn = findViewById(R.id.log_out);
+        ImageButton log_out_btn = findViewById(R.id.logout);
         log_out_btn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -119,8 +119,8 @@ public class Profile extends AppCompatActivity{
     }
 
     private void initValues() {
-        tv_name = (TextView) findViewById(R.id.et_email);
-        tv_token = (TextView) findViewById(R.id.token_id);
+        tv_name = (TextView) findViewById(R.id.user_profile_name);
+        tv_token = (TextView) findViewById(R.id.user_profile_short_bio);
     }
 
     private void loadProfile(){
