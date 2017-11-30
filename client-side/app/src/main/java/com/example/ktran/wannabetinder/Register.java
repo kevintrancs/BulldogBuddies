@@ -52,7 +52,6 @@ public class Register extends android.app.Fragment implements View.OnClickListen
         et_phone = (EditText) view.findViewById(R.id.et_phone);
         mySpinner = view.findViewById(R.id.spinner);
         progress = (ProgressBar)view.findViewById(R.id.progress);
-
         btn_register.setOnClickListener(this);
         tv_login.setOnClickListener(this);
     }
@@ -91,7 +90,9 @@ public class Register extends android.app.Fragment implements View.OnClickListen
 
         RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
 
-        User user = new User(name, password, department, phone);
+        int[] a = {1,2,3,4,5,6,7,8}; // testing to ensure we can pass - PASS
+
+        User user = new User(name, password, department, phone, a);
 
         Call<ServerResponse> response = requestInterface.registerUser(user);
 

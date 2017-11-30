@@ -10,6 +10,16 @@ public class ServerResponse {
     private String token;
     private User user;
     private User[] users;
+    private Friend friend;
+    private Friend[] friends;
+
+    public Friend getFriend() {
+        return friend;
+    }
+
+    public Friend[] getFriends() {
+        return friends;
+    }
 
     public User[] getUsers() {return users;}
     public User getuser(){return user;}

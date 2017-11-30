@@ -87,7 +87,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
                 .build();
 
         RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
-        User user = new User(username, password, null, null );
+        User user = new User(username, password, null, null , null);
         Call<ServerResponse> response = requestInterface.authUser(user);
 
         response.enqueue(new Callback<ServerResponse>() {

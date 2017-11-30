@@ -9,6 +9,7 @@ public class User {
     private String password;
     private String department;
     private String phone;
+    private int[] survey_data;
     private String[] friends;
 
     @Override
@@ -16,7 +17,8 @@ public class User {
         return "Name: " + this.name + " | Phone: " + this.phone + " | Department: " + this.department;
     }
 
-    public User(String name, String password, String department, String phone) {
+    public User(String name, String password, String department, String phone, int[] survey_results) {
+        this.survey_data = survey_results;
         this.name = name;
         this.password = password;
         this.department = department;
@@ -53,5 +55,20 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+    public int[] getSurvey_results() {
+        return survey_data;
+    }
+
+    public void setSurvey_results(int[] survey_results) {
+        this.survey_data = survey_results;
+    }
+
+    public String[] getFriends() {
+        return friends;
+    }
+
+    public void setFriends(String[] friends) {
+        this.friends = friends;
     }
 }

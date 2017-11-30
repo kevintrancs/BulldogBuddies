@@ -9,7 +9,6 @@ var Status = require("mongoose-friends").Status;
 mongoose.connect(config.database); //Crossing my fingers here
 app.set('gina_secret', config.secret); 
 
-
 /**
  * @GET /myRequests - Checks what pending friend requests you have
  * @param String: Token - authenticate who you are
@@ -59,6 +58,7 @@ apiRoutes.get('/friends',function(req, res){
                     if(err)
                         throw err;
                     return res.json({
+                        success:true,
                         friends: friendships})
                   });      
         });    

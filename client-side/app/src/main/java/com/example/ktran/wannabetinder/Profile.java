@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.models.Constants;
+import com.example.ktran.wannabetinder.models.Friend;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
@@ -32,7 +33,7 @@ public class Profile extends AppCompatActivity{
     private String mToken;
     private String mName;
     private User mUser;
-    private User[] all_users;
+    private Friend[] all_users;
     private TextView tv_name;
     private TextView tv_token;
     private ListView popUpListView;
@@ -60,14 +61,14 @@ public class Profile extends AppCompatActivity{
 
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
 
-                Call<ServerResponse> response = friendsInterface.getUsers(mToken);
+                Call<ServerResponse> response = friendsInterface.getFriends(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                         ServerResponse resp = response.body();
                         if(resp.getSuccess()){
-                            all_users = resp.getUsers();
-                            ArrayList<User> aList= new ArrayList<User>(Arrays.asList(all_users));
+                            all_users = resp.getFriends();
+                            ArrayList<Friend> aList= new ArrayList<Friend>(Arrays.asList(all_users));
                                     DisplayMetrics metrics = getResources().getDisplayMetrics();
                                     int width = metrics.widthPixels;
                                     int height = metrics.heightPixels;
