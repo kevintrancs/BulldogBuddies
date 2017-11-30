@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt')
 var Schema = mongoose.Schema;
+var friends = require("mongoose-friends")
 SALT_WORK_FACTOR = 10;
 
 var UserSchema = new Schema({
@@ -8,8 +9,11 @@ var UserSchema = new Schema({
     password: String,
     department: String,
     phone: String,
-    friends: [{ type: Schema.Types.ObjectId, ref: 'User'}]
+    //friends: [{ type: Schema.Types.ObjectId, ref: 'User'}],
+    survey_results: [Number],
+    matches: [{ type: Schema.Types.ObjectId, ref: 'User'}]
 });
+UserSchema.plugin(friends({pathName: "myFriends"}));
 
 UserSchema.pre('save', function(next) {
     var user = this;
@@ -41,4 +45,4 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 
-module.exports = mongoose.model('User', UserSchema, 'gina_users');
+module.exports = mongoose.model('User', UserSchema, 'nicoles_user');

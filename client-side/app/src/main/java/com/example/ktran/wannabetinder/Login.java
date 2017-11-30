@@ -80,6 +80,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10,TimeUnit.SECONDS).build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL).client(client)
                 .addConverterFactory(GsonConverterFactory.create())
