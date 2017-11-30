@@ -103,7 +103,8 @@ public class Register extends android.app.Fragment implements View.OnClickListen
                 Snackbar.make(getView(), resp.getMessage(), Snackbar.LENGTH_LONG).show();
                 progress.setVisibility(View.INVISIBLE);
                 if(resp.getSuccess()){
-                    goToLogin();
+                    goToSurvey();
+                    //goToLogin();
                 }else{
                     Snackbar.make(getView(), "Something is wrongs", Snackbar.LENGTH_LONG).show();
                 }
@@ -116,6 +117,14 @@ public class Register extends android.app.Fragment implements View.OnClickListen
 
             }
         });
+    }
+
+    private void goToSurvey() {
+        Fragment survey = new SurveyFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_frame, survey);
+        ft.commit();
+
     }
 
     private void goToLogin(){

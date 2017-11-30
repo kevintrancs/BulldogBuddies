@@ -1,0 +1,115 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ktran.wannabetinder.SurveyFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Please fill out the survey so we can match you with peers."
+            android:padding="16dp"/>
+
+        <TextView
+            android:id="@+id/questionOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. What is your current major?"
+            android:padding="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/interest_array"
+            android:spinnerMode="dialog"
+            android:padding="16dp"
+            style="@style/Widget.AppCompat.Spinner.DropDown">
+        </Spinner>
+
+        <TextView
+            android:id="@+id/questionTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Why are you on this app?"
+            android:padding="16dp"/>
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/reason_to_be_here"
+            android:spinnerMode="dialog"
+            android:padding="16dp"
+            style="@style/Widget.AppCompat.Spinner.DropDown">
+        </Spinner>
+
+        <TextView
+            android:id="@+id/questionThree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="3. What is your favorite place on campus?" />
+
+        <Spinner
+            android:id="@+id/spinner3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/favorite_place"
+            android:spinnerMode="dialog"
+            android:padding="16dp"
+            style="@style/Widget.AppCompat.Spinner.DropDown">
+        </Spinner>
+
+        <TextView
+            android:id="@+id/questionFour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="3. What is your favorite cuisine?" />
+
+        <Spinner
+            android:id="@+id/spinner4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/favorite_cuisine"
+            android:spinnerMode="dialog"
+            android:padding="16dp"
+            style="@style/Widget.AppCompat.Spinner.DropDown">
+        </Spinner>
+
+
+        <TextView
+            android:id="@+id/questionFive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="3. What are your study habits?" />
+
+        <Spinner
+            android:id="@+id/spinner5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/study_habits"
+            android:spinnerMode="dialog"
+            android:padding="16dp"
+            style="@style/Widget.AppCompat.Spinner.DropDown">
+        </Spinner>
+
+        <Button
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:layout_gravity="bottom|center"/>
+
+    </LinearLayout>
+
+</ScrollView>
