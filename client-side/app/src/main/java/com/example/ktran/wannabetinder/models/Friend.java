@@ -22,7 +22,7 @@ public class Friend {
 
     @Override
     public String toString() {
-        return "Friends:" + friend.getName();
+        return friend.getName() + "Phone Number - slide in those DMs:" +  friend.getPhone();
     }
 
     public Date getAdded() {

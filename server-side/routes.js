@@ -76,7 +76,7 @@ apiRoutes.get('/friends',function(req, res){
  * @return success: {boolean, String}
 */
 apiRoutes.post('/requestFriend', function(req,res){
-    var search_friend = req.body.r_friend;
+    var search_friend = req.body.name;
     var token = req.headers['x-access-token'];    
     if(token){
         jwt.verify(token, app.get('gina_secret'), function(err, decoded) {  
@@ -94,12 +94,20 @@ apiRoutes.post('/requestFriend', function(req,res){
                             throw error;
                         if(friend){
                             User.requestFriend(self._id, friend._id,function(err, friends){
-                                res.json({
-                                    success: true, 
-                                    message: "Request sent!",
+                                if(err)
+                                    throw err;
+                                return res.json({
+                                    success: true,
+                                    message: "Request sent :)"
                                 });
                             });
                         }
+                    });
+                }
+                else{                    
+                    res.json({
+                        success: false,
+                        message: "failure"
                     });
                 }
             });

@@ -12,6 +12,10 @@ public class User {
     private int[] survey_data;
     private String[] friends;
 
+    public User(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "Name: " + this.name + " | Phone: " + this.phone + " | Department: " + this.department;

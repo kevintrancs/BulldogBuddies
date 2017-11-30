@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -60,6 +61,7 @@ public class Profile extends AppCompatActivity{
                         .build();
 
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
+                /** TESTING FUNCTIONS - GET FRIENDS - PASS
 
                 Call<ServerResponse> response = friendsInterface.getFriends(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
@@ -92,6 +94,25 @@ public class Profile extends AppCompatActivity{
                     }
                 });
 
+                */
+                /**TESTING FUNCTIONS - SEND REQUEST - PASS??? I THINK
+                 *
+                 Call<ServerResponse> response = friendsInterface.requestAFriend(mToken, new User("dave"));
+                 response.enqueue(new Callback<ServerResponse>() {
+                @Override
+                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                ServerResponse resp = response.body();
+                    if(resp.getSuccess()){
+                        tv_token.setText(resp.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ServerResponse> call, Throwable t) {
+                    Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
+                }
+                });
+                 */
             }
         });
 
