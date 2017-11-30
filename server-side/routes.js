@@ -5,21 +5,48 @@ var jwt    = require('jsonwebtoken');
 var config = require('./config');
 var mongoose    = require('mongoose');
 var app         = express();
+var Status = require("mongoose-friends").Status;
 mongoose.connect(config.database); //Crossing my fingers here
 app.set('gina_secret', config.secret); 
 
 
-//////////////////////////////
-// Check Requets, Requested, and Pending
-// GET YOUR FRIEND
-//////////////////////////////
+/**
+ * @GET /myRequests - Checks what pending friend requests you have
+ * @param String: Token - authenticate who you are
+ * @return success: {date, {String} Status.PENDING, {String}_id, User
+ */
+apiRoutes.get('/myRequests',function(req, res){
+    var token = req.headers['x-access-token'];    
+    if(token){
+        jwt.verify(token, app.get('gina_secret'), function(err, decoded) {  
+            if(err){
+                return res.json({ success: false, 
+                    message: 'Failed to authenticate token.' 
+                });   
+            }
+            User.getFriends(decoded.user, {"myFriends.status": Status.Pending}, function(err, result){
+                return res.json({
+                    "Pending": result
+                });
+            });
+         
+        });    
+    } 
+    else{
+        return res.json({ success: false, 
+            message: 'No Token' 
+        });   
+    }
+});
 
 
-//////////////////////////////
-// FRIENDSHIP SCHEMA
-// GET YOUR FRIEND
-//////////////////////////////
-apiRoutes.get('/friends/',function(req, res){
+/**
+ * 
+ * @GET /friends  - Gets your ACCEPTED friends
+ * @param String: Token - authenticate who you are
+* @return success: [{date, {String} Status.PENDING, {String}_id, User]
+ */
+apiRoutes.get('/friends',function(req, res){
     var token = req.headers['x-access-token'];    
     if(token){
         jwt.verify(token, app.get('gina_secret'), function(err, decoded) {  
@@ -28,11 +55,11 @@ apiRoutes.get('/friends/',function(req, res){
                     message: 'Failed to authenticate token.' 
                 });   
             } 
-                    User.getFriends(decoded.user, function (err, friendships) {
+                    User.getFriends(decoded.user,{"myFriends.status": Status.Accepted},function (err, friendships) {
                     if(err)
                         throw err;
                     return res.json({
-                        array_friends: friendships})
+                        friends: friendships})
                   });      
         });    
     } 
@@ -43,11 +70,13 @@ apiRoutes.get('/friends/',function(req, res){
     }
 })
 
-//////////////////////////////
-// SEND REQUEST FRIEND
-// GET YOUR FRIEND
-//////////////////////////////
+/**
+ * @POST /requestFriend - Sends friend request
+ * @param String:r_friend - name of the friend you want to send
+ * @return success: {boolean, String}
+*/
 apiRoutes.post('/requestFriend', function(req,res){
+    var search_friend = req.body.r_friend;
     var token = req.headers['x-access-token'];    
     if(token){
         jwt.verify(token, app.get('gina_secret'), function(err, decoded) {  
@@ -60,13 +89,14 @@ apiRoutes.post('/requestFriend', function(req,res){
                 if(err)
                     throw error;
                 if(self){
-                    User.findOne({name: req.body.r_friend}, function(err, friend){
+                    User.findOne({name: search_friend}, function(err, friend){
                         if(err)
                             throw error;
                         if(friend){
-                            User.requestFriend(friend._id, me._id,function(err, friends){
+                            User.requestFriend(self._id, friend._id,function(err, friends){
                                 res.json({
-                                    success: true, message: "Request sent!"
+                                    success: true, 
+                                    message: "Request sent!",
                                 });
                             });
                         }
@@ -83,19 +113,24 @@ apiRoutes.post('/requestFriend', function(req,res){
     }
 })
 
-//////////////////////////////
-// LOGIN / AUTH
-//RETURNS JWT for Session
-//////////////////////////////
+/**
+ * @POST /authenticate - Logins user in
+ * @param {String: name, String: password}
+ * @return {boolean, String:message, String:token, User:user}
+ * 
+ */
 apiRoutes.post('/authenticate', function(req, res) {
-      User.findOne({name: req.body.name}, function(err, user) {
+      var user_to_find = req.body.name;
+      var user_password_entered = req.body.password;
+
+      User.findOne({name: user_to_find}, function(err, user) {
         if (err) 
             throw err;
         if (!user) {
           res.json({ success: false, message: 'Student does not EXIST, sorry.' });
         } 
         else if (user) {
-            user.comparePassword(req.body.password, function(err, isMatch) {
+            user.comparePassword(user_password_entered, function(err, isMatch) {
                 if (err) 
                     throw err;
                 if(isMatch){
@@ -122,11 +157,13 @@ apiRoutes.post('/authenticate', function(req, res) {
       });
     });
 
-//////////////////////////////
-// REGISTER 
-// REGISTERS USER IF THEY DON'T EXIST
-//////////////////////////////
+/**
+ * @POST /register - Register user
+ * @param {String name, password, department, phone, Number[]: survey_results}
+ * @return User: user
+ */
 apiRoutes.post('/register', function(req, res){
+         var user_to_register = req.body.name;    
         var new_user;
         /**
          * Implmement this after testing is done so i'm not frustrated and shit
@@ -156,7 +193,7 @@ apiRoutes.post('/register', function(req, res){
             })
          }
          */
-        User.findOne({name: req.body.name}, function (err, success) {
+        User.findOne({name: user_to_register}, function (err, success) {
             if (err) {
                 console.log(err);
                 res.send(err);
@@ -187,10 +224,11 @@ apiRoutes.post('/register', function(req, res){
         })
     });
 
-//////////////////////////////
-// GET PROFILE 
-// IF USER HAS TOKEN, THEN GET USER INFO
-//////////////////////////////
+/**
+ * @GET /profile/:id - Gets data about loggedin user
+ * @param String: token
+ * @return {boolean, String:message, User:user}
+ */
 apiRoutes.get('/profile/:id', function(req, res){
     var token = req.headers['x-access-token'];
     if(token){
@@ -203,8 +241,8 @@ apiRoutes.get('/profile/:id', function(req, res){
             if(decoded.user.name == req.params.id){
                 return res.json({
                     success:true,
-                    message: "Name: " + decoded.user.name,
-                    user: decoded.user.matches
+                    message: "Welcome " + decoded.user.name,
+                    user: decoded.user
                 })
             }
             else {
@@ -216,17 +254,17 @@ apiRoutes.get('/profile/:id', function(req, res){
         })      
     } 
 });
-//////////////////////////////
-// ????????
-//////////////////////////////
+/**
+ * @GET /
+ */
 apiRoutes.get('/', function(req, res) {
   res.json({ message: 'Kevin Tran Default Testing Route localhost:8080/api/' });
 });
 
-//////////////////////////////
-// GET LIST OF ALL USERS
-// JSON OF ALL USERS BACK
-//////////////////////////////
+/**
+ * @GET /users
+ * @return Users[]
+ */
 apiRoutes.get('/users', function(req, res) {
   User.find({}, function(err, all_users) {
     res.json({
@@ -235,68 +273,15 @@ apiRoutes.get('/users', function(req, res) {
   });
 });  
 
-//////////////////////////////
-// ADD FRIEND/ GET FOLLOWER
-// FINDS FOLLOWER VIA ID, THEN IF NOT FOLLOWING WILL
-//////////////////////////////
-apiRoutes.get('/addFriend/:id/:f_id', function(req, res) {
-    var token = req.headers['x-access-token'];
-    if(token){
-        jwt.verify(token, app.get('gina_secret'), function(err, decoded) {  
-            if(err){
-                return res.json({ success: false, 
-                    message: 'Failed to authenticate token.' 
-                });   
-            } 
-            if(decoded.user.name == req.params.id){
-                User.findOne({name: req.params.f_id}, function(err, friend) {
-                    var _friend = friend;
-                    if(err){
-                        return res.json({ success: false, 
-                            message: 'Error somewhere' 
-                        }); 
-                    }
-                    else if(friend){
-                     User.findOne({name: req.params.id},function(err, user){   
-                        var isInArray = user.friends.some(function (check_friend) {
-                            return check_friend.equals(friend._id);
-                        });
-                        if(isInArray){
-                            return res.json({ success: false, 
-                                message: "Already following" 
-                            });
-                        }
-                        else{
-                        user.friends.push(friend)
-                        user.save(function(err, results){
-                            if(err)
-                                throw err;
-                            else{
-                                return res.json({ success: true, 
-                                    message: user 
-                                }); 
-                            }
-                        });
-                    }
-                     });
-                    }
-                  });
-            }
-            else {
-                return res.json({
-                    success:false,
-                    message: "I don't know how you got here, but this is not you friend."
-                })
-            }
-        })      
-    }
-  });  
-
-
-//////////////////////////////
-// Get Matches Simple
-// This shit took way to long im dumb af
-//////////////////////////////
+/**
+ * @GET /getMatches - Finds matches everytime searched based on survey results
+ * This function is janky beyond belief, it works I guess, needs better method and matching.
+ * This is just dumb af
+ * TODO: FIX IT ALL
+ * 
+ * @param {String:token}
+ * @return {boolean, String:message, matches[User]}
+ */
 apiRoutes.get('/getMatches', function(req, res){
     var token = req.headers['x-access-token'];  
     var a = [];
@@ -319,10 +304,21 @@ apiRoutes.get('/getMatches', function(req, res){
                         a.push(users[i])
                 }
         });
+
+        User.findById(decoded.user._id, function(err, self){ // Update user matches on each call
+            if(err)
+                throw err;
+            user.matches = a;
+            user.save(function(err, zz){
+                if(err)
+                  throw err;
+            });
+        });
+
         User.findById(decoded.user._id).populate('matches').exec(function (err, user) {
           if (err)
             throw err;
-          else {
+          else {// FLAW SAVE BEFORE THE POPULATE move when you have time
               user.matches = a;
               user.save(function(err, zz){
                   if(err)
