@@ -55,6 +55,9 @@ public class SurveyFragment extends android.app.Fragment  {
     int[] array_answer_values = new int[numOfQuestions];
     User user;
 
+    protected View mView;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -123,16 +126,16 @@ public class SurveyFragment extends android.app.Fragment  {
                 ServerResponse resp = response.body();
                 //progress.setVisibility(View.INVISIBLE);
                 if(resp.getSuccess()){
-                    Snackbar.make(getView(), "Regististratoin is successful!", Snackbar.LENGTH_LONG).show();
+                    Log.d("SF", "Good");
 
                 }else{
-                    Snackbar.make(getView(), "Something is wrongs", Snackbar.LENGTH_LONG).show();
+                    Log.d("SF", "Bad");
                 }
             }
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
                 //progress.setVisibility(View.INVISIBLE);
-                Snackbar.make(getView(), t.getCause() + " " + t.getMessage() + " error", Snackbar.LENGTH_LONG).show();
+                Log.d("SF", "Worse");
             }
         });
     }

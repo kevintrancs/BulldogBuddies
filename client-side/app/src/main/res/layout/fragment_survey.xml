@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ktran.wannabetinder.SurveyFragment">
+    tools:context="com.example.ktran.wannabetinder.SurveyFragment"
+    android:id="@+id/sf">
 
     <LinearLayout
         android:layout_width="match_parent"

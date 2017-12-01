@@ -19,6 +19,7 @@ import com.example.ktran.wannabetinder.models.Friend;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
+import com.example.ktran.wannabetinder.models.UserAdapter;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,15 +54,7 @@ public class Profile extends AppCompatActivity{
         find_friends_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(10,TimeUnit.SECONDS).build();
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(Constants.BASE_URL).client(client)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
+                Retrofit retrofit = getRetro();
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
                 Call<ServerResponse> response = friendsInterface.getFriends(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
@@ -102,15 +95,7 @@ public class Profile extends AppCompatActivity{
 
             @Override
             public void onClick(View arg0) {
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(10,TimeUnit.SECONDS).build();
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(Constants.BASE_URL).client(client)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
+               final Retrofit retrofit = getRetro();
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
                 Call<ServerResponse> response = friendsInterface.getMyMatches(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
@@ -120,6 +105,7 @@ public class Profile extends AppCompatActivity{
                         if(resp.getSuccess()){
                             matched_users = resp.getUsers();
                             ArrayList<User> aList= new ArrayList<User>(Arrays.asList(matched_users));
+
                             DisplayMetrics metrics = getResources().getDisplayMetrics();
                             int width = metrics.widthPixels;
                             int height = metrics.heightPixels;
@@ -127,48 +113,12 @@ public class Profile extends AppCompatActivity{
                             dialog.setContentView(R.layout.pop_up);
                             dialog.setTitle("My Requests");
                             popUpListView= dialog.findViewById(R.id.list_friends);
-                            ArrayAdapter<User>adapter = new ArrayAdapter(Profile.this,android.R.layout.simple_list_item_1, aList);
+
+
+                            UserAdapter adapter = new UserAdapter(Profile.this, aList);
                             popUpListView.setAdapter(adapter);
                             dialog.show();
                             dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
-                            popUpListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position,
-                                                        long id) {
-                                    User prac = (User)parent.getAdapter().getItem(position);
-                                    OkHttpClient client = new OkHttpClient.Builder()
-                                            .connectTimeout(10, TimeUnit.SECONDS)
-                                            .readTimeout(10,TimeUnit.SECONDS).build();
-
-                                    Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(Constants.BASE_URL).client(client)
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-
-                                    RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
-                                    Call<ServerResponse> response = friendsInterface.requestAFriend(mToken, prac);
-                                    response.enqueue(new Callback<ServerResponse>() {
-                                        @Override
-                                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                                            ServerResponse resp = response.body();
-                                            if(resp.getSuccess()){
-                                                Snackbar.make(findViewById(R.id.ap),resp.getMessage(), Snackbar.LENGTH_LONG).show();
-
-                                            }
-                                            else{
-                                                Snackbar.make(findViewById(R.id.ap),"Donezo", Snackbar.LENGTH_LONG).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ServerResponse> call, Throwable t) {
-                                            Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
-                                        }
-                                    });
-
-
-                                }
-                            });
                         }
                         else{
                             Snackbar.make(findViewById(R.id.ap),"Donezo", Snackbar.LENGTH_LONG).show();
@@ -188,15 +138,7 @@ public class Profile extends AppCompatActivity{
 
             @Override
             public void onClick(View arg0) {
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(10,TimeUnit.SECONDS).build();
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(Constants.BASE_URL).client(client)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
+                Retrofit retrofit = getRetro();
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
                 Call<ServerResponse> response = friendsInterface.getMyRequests(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
@@ -256,23 +198,13 @@ public class Profile extends AppCompatActivity{
     }
 
     private void initValues() {
-        tv_name = (TextView) findViewById(R.id.user_profile_name);
-        tv_token = (TextView) findViewById(R.id.user_profile_short_bio);
+        tv_name = findViewById(R.id.user_profile_name);
+        tv_token = findViewById(R.id.user_profile_short_bio);
     }
 
     private void loadProfile(){
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10,TimeUnit.SECONDS).build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL).client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
+        Retrofit retrofit = getRetro();
         RetroInterfaces profileInterface = retrofit.create(RetroInterfaces.class);
-
         Call<ServerResponse> response = profileInterface.getProfile(mToken, mName);
         response.enqueue(new Callback<ServerResponse>() {
             @Override
@@ -288,5 +220,17 @@ public class Profile extends AppCompatActivity{
 
             }
         });
+    }
+    public Retrofit getRetro(){
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10,TimeUnit.SECONDS).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL).client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit;
     }
 }
