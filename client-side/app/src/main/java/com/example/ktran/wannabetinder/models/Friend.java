@@ -22,7 +22,10 @@ public class Friend {
 
     @Override
     public String toString() {
-        return friend.getName() + "Phone Number - slide in those DMs:" +  friend.getPhone();
+        if(this.status.equals("accepted"))
+            return friend.getName().toUpperCase() + " | Phone Number(slide in those DMs): " +  friend.getPhone();
+        else
+            return friend.getName().toUpperCase() + " | Current status: " + this.status;
     }
 
     public Date getAdded() {

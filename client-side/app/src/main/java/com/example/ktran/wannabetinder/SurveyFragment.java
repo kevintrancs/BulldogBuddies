@@ -16,14 +16,26 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.ktran.wannabetinder.models.Constants;
+import com.example.ktran.wannabetinder.models.RetroInterfaces;
+import com.example.ktran.wannabetinder.models.ServerResponse;
+import com.example.ktran.wannabetinder.models.User;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SurveyFragment extends Fragment  {
+public class SurveyFragment extends android.app.Fragment  {
 
     final String TAG = "SurveyFragment: ";
     final int numOfQuestions = 5;
@@ -40,10 +52,8 @@ public class SurveyFragment extends Fragment  {
     String[] arrayOfAnswers = new String[numOfQuestions];
     Button button;
     SharedPreferences mSharedPreferences;
-
-    public SurveyFragment() {
-        // Required empty public constructor
-    }
+    int[] array_answer_values = new int[numOfQuestions];
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,12 +73,9 @@ public class SurveyFragment extends Fragment  {
             @Override
             public void onClick(View view) {
                 doneClicked();
-
-                //Return to login
                 goToLogin();
             }
         });
-
         return view;
     }
 
@@ -80,20 +87,54 @@ public class SurveyFragment extends Fragment  {
         q4 = spinner4.getSelectedItem().toString();
         q5 = spinner5.getSelectedItem().toString();
 
-        //TEST
-        Snackbar.make(getView(), "Answers:" + q1+q2+q3+q4+q5, Snackbar.LENGTH_LONG).show();
+        // Just need ints
+        array_answer_values[0] = spinner1.getSelectedItemPosition();
+        array_answer_values[1] = spinner2.getSelectedItemPosition();
+        array_answer_values[2] = spinner3.getSelectedItemPosition();
+        array_answer_values[3] = spinner4.getSelectedItemPosition();
+        array_answer_values[4] = spinner5.getSelectedItemPosition();
 
         //Insert the items into the array of user responses
         updateArray();
 
-        //Save the answers in sharedPreferences
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString("q1", q1);
-        editor.putString("q2", q2);
-        editor.putString("q3", q3);
-        editor.putString("q4", q4);
-        editor.putString("q5", q5);
-        editor.apply();
+        String sobj = mSharedPreferences.getString("reg_user", "");
+        if(sobj.equals(""))
+            Log.d("Error", "error");
+        else
+             user = new Gson().fromJson(sobj, User.class);
+
+        user.setSurvey_results(array_answer_values);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10,TimeUnit.SECONDS).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL).client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
+
+        Call<ServerResponse> response = requestInterface.registerUser(user);
+        response.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, retrofit2.Response<ServerResponse> response) {
+                ServerResponse resp = response.body();
+                //progress.setVisibility(View.INVISIBLE);
+                if(resp.getSuccess()){
+                    Snackbar.make(getView(), "Regististratoin is successful!", Snackbar.LENGTH_LONG).show();
+
+                }else{
+                    Snackbar.make(getView(), "Something is wrongs", Snackbar.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                //progress.setVisibility(View.INVISIBLE);
+                Snackbar.make(getView(), t.getCause() + " " + t.getMessage() + " error", Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void updateArray() {

@@ -31,11 +31,19 @@
         <RelativeLayout
             android:id="@+id/profile_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_below="@+id/header_cover_image"
             android:background="#49628c"
             android:elevation="4dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="0dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/navigation_header_image" />
 
 
             <ImageButton
@@ -44,7 +52,7 @@
                 android:layout_height="30dp"
                 android:layout_alignTop="@+id/logout"
                 android:layout_toStartOf="@+id/logout"
-                android:src="@drawable/add_user" />
+                android:src="@drawable/better_add" />
 
             <ImageButton
                 android:id="@+id/logout"
@@ -87,17 +95,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/phoneNumber"
+                android:id="@+id/match_me"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="#fff"
                 android:clickable="true"
                 android:elevation="4dp"
+                android:gravity="center"
                 android:padding="20dp"
-                android:text="Phone" />
+                android:text="GET MATCHES"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/find_requested"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -106,8 +118,12 @@
                 android:background="#fff"
                 android:clickable="true"
                 android:elevation="4dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
                 android:padding="20dp"
-                android:text="Department" />
+                android:text="FRIEND REQUESTS"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -115,6 +131,7 @@
                 android:layout_margin="5dp"
                 android:background="#fff"
                 android:clickable="true"
+                android:gravity="center"
                 android:elevation="4dp"
                 android:padding="20dp"
                 android:text="a" />
@@ -127,6 +144,7 @@
                 android:layout_marginTop="3dp"
                 android:background="#fff"
                 android:clickable="true"
+                android:gravity="center"
                 android:elevation="4dp"
                 android:padding="20dp"
                 android:text="b" />
@@ -137,6 +155,7 @@
                 android:layout_margin="5dp"
                 android:background="#fff"
                 android:clickable="true"
+                android:gravity="center"
                 android:elevation="4dp"
                 android:padding="20dp"
                 android:text="c" />

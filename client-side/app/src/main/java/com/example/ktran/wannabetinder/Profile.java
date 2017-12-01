@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -34,7 +35,8 @@ public class Profile extends AppCompatActivity{
     private String mToken;
     private String mName;
     private User mUser;
-    private User[] all_users;
+    private User[] matched_users;
+    private Friend[] all_friends;
     private TextView tv_name;
     private TextView tv_token;
     private ListView popUpListView;
@@ -61,18 +63,14 @@ public class Profile extends AppCompatActivity{
                         .build();
 
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
-
-
-                /** TESTING FUNCTIONS - GET FRIENDS - PASS
-
                 Call<ServerResponse> response = friendsInterface.getFriends(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                         ServerResponse resp = response.body();
                         if(resp.getSuccess()){
-                            all_users = resp.getFriends();
-                            ArrayList<Friend> aList= new ArrayList<Friend>(Arrays.asList(all_users));
+                            all_friends = resp.getFriends();
+                            ArrayList<Friend> aList= new ArrayList<Friend>(Arrays.asList(all_friends));
                                     DisplayMetrics metrics = getResources().getDisplayMetrics();
                                     int width = metrics.widthPixels;
                                     int height = metrics.heightPixels;
@@ -96,37 +94,32 @@ public class Profile extends AppCompatActivity{
                     }
                 });
 
-                */
-                /**TESTING FUNCTIONS - SEND REQUEST - PASS??? I THINK
-                 *
-                 Call<ServerResponse> response = friendsInterface.requestAFriend(mToken, new User("dave"));
-                 response.enqueue(new Callback<ServerResponse>() {
-                @Override
-                public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                ServerResponse resp = response.body();
-                    if(resp.getSuccess()){
-                        tv_token.setText(resp.getMessage());
-                    }
-                }
+            }
+        });
 
-                @Override
-                public void onFailure(Call<ServerResponse> call, Throwable t) {
-                    Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
-                }
-                });
-                 */
+        TextView match_btn = findViewById(R.id.match_me);
+        match_btn.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View arg0) {
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10,TimeUnit.SECONDS).build();
 
-                /**  TESTING FUNCTIONS - GETMYREQUESTS - PASS GOOD SHIT
-                 *
-                Call<ServerResponse> response = friendsInterface.getMyRequests(mToken);
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Constants.BASE_URL).client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
+                Call<ServerResponse> response = friendsInterface.getMyMatches(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                         ServerResponse resp = response.body();
                         if(resp.getSuccess()){
-                            all_users = resp.getFriends();
-                            ArrayList<Friend> aList= new ArrayList<Friend>(Arrays.asList(all_users));
+                            matched_users = resp.getUsers();
+                            ArrayList<User> aList= new ArrayList<User>(Arrays.asList(matched_users));
                             DisplayMetrics metrics = getResources().getDisplayMetrics();
                             int width = metrics.widthPixels;
                             int height = metrics.heightPixels;
@@ -138,6 +131,44 @@ public class Profile extends AppCompatActivity{
                             popUpListView.setAdapter(adapter);
                             dialog.show();
                             dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
+                            popUpListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position,
+                                                        long id) {
+                                    User prac = (User)parent.getAdapter().getItem(position);
+                                    OkHttpClient client = new OkHttpClient.Builder()
+                                            .connectTimeout(10, TimeUnit.SECONDS)
+                                            .readTimeout(10,TimeUnit.SECONDS).build();
+
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(Constants.BASE_URL).client(client)
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
+                                    Call<ServerResponse> response = friendsInterface.requestAFriend(mToken, prac);
+                                    response.enqueue(new Callback<ServerResponse>() {
+                                        @Override
+                                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                                            ServerResponse resp = response.body();
+                                            if(resp.getSuccess()){
+                                                Snackbar.make(findViewById(R.id.ap),resp.getMessage(), Snackbar.LENGTH_LONG).show();
+
+                                            }
+                                            else{
+                                                Snackbar.make(findViewById(R.id.ap),"Donezo", Snackbar.LENGTH_LONG).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ServerResponse> call, Throwable t) {
+                                            Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
+                                        }
+                                    });
+
+
+                                }
+                            });
                         }
                         else{
                             Snackbar.make(findViewById(R.id.ap),"Donezo", Snackbar.LENGTH_LONG).show();
@@ -149,15 +180,32 @@ public class Profile extends AppCompatActivity{
                         Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
                     }
                 });
-                */
-                Call<ServerResponse> response = friendsInterface.getMyMatches(mToken);
+            }
+        });
+
+        TextView req_btn = findViewById(R.id.find_requested);
+        req_btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10,TimeUnit.SECONDS).build();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(Constants.BASE_URL).client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
+                Call<ServerResponse> response = friendsInterface.getMyRequests(mToken);
                 response.enqueue(new Callback<ServerResponse>() {
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                         ServerResponse resp = response.body();
                         if(resp.getSuccess()){
-                            all_users = resp.getUsers();
-                            ArrayList<User> aList= new ArrayList<User>(Arrays.asList(all_users));
+                            all_friends = resp.getFriends();
+                            ArrayList<Friend> aList= new ArrayList<Friend>(Arrays.asList(all_friends));
                             DisplayMetrics metrics = getResources().getDisplayMetrics();
                             int width = metrics.widthPixels;
                             int height = metrics.heightPixels;

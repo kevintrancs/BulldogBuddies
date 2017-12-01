@@ -2,7 +2,9 @@ package com.example.ktran.wannabetinder;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
@@ -16,6 +18,8 @@ import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
+import com.google.gson.Gson;
+
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -34,6 +38,8 @@ public class Register extends android.app.Fragment implements View.OnClickListen
     private Spinner mySpinner;
     private TextView tv_login;
     private ProgressBar progress;
+    SharedPreferences mSharedPreferences;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,46 +84,15 @@ public class Register extends android.app.Fragment implements View.OnClickListen
     }
 
     private void registerProcess(String name, String password, String department, String phone){
+        User user = new User(name, password, department, phone, null);
 
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10,TimeUnit.SECONDS).build();
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString("reg_user",new Gson().toJson(user));
+        editor.commit();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL).client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        goToSurvey();
 
-        RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
-
-        int[] a = {1,2,3,4,5,6,7,8}; // testing to ensure we can pass - PASS
-
-        User user = new User(name, password, department, phone, a);
-
-        Call<ServerResponse> response = requestInterface.registerUser(user);
-
-        response.enqueue(new Callback<ServerResponse>() {
-            @Override
-            public void onResponse(Call<ServerResponse> call, retrofit2.Response<ServerResponse> response) {
-
-                ServerResponse resp = response.body();
-                Snackbar.make(getView(), resp.getMessage(), Snackbar.LENGTH_LONG).show();
-                progress.setVisibility(View.INVISIBLE);
-                if(resp.getSuccess()){
-                    goToSurvey();
-                    //goToLogin();
-                }else{
-                    Snackbar.make(getView(), "Something is wrongs", Snackbar.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<ServerResponse> call, Throwable t) {
-
-                progress.setVisibility(View.INVISIBLE);
-                Snackbar.make(getView(), t.getCause() + " " + t.getMessage() + " error", Snackbar.LENGTH_LONG).show();
-
-            }
-        });
     }
 
     private void goToSurvey() {
@@ -129,7 +104,6 @@ public class Register extends android.app.Fragment implements View.OnClickListen
     }
 
     private void goToLogin(){
-
         Fragment login = new Login();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame,login);

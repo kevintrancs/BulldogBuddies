@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="3. What is your favorite cuisine?" />
+            android:text="4. What is your favorite cuisine?" />
 
         <Spinner
             android:id="@+id/spinner4"
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="3. What are your study habits?" />
+            android:text="5. What are your study habits?" />
 
         <Spinner
             android:id="@+id/spinner5"
