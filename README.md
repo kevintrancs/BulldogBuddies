@@ -24,6 +24,12 @@ module.exports = {
     };
 ```
 
+If there are issues with node compile error
+run with direct with package.json
+```
+npm rebuild --build-from-source
+```
+
 #### Authors
 Kevin Tran & Nicole Howard
 
