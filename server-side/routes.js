@@ -301,7 +301,7 @@ apiRoutes.get('/getMatches', function(req, res){
                     message: 'Failed to authenticate token.' 
                 });   
             }
-            User.find({name: -decoded.user.name}, function(err, users){
+            User.find({}, function(err, users){
                 for(var i = 0; i < users.length; i++){
                     var matches = 0;
                     for(var j = 0; j < decoded.user.survey_results.length-1; j++){
@@ -309,7 +309,7 @@ apiRoutes.get('/getMatches', function(req, res){
                             matches++;
                         }
                     }
-                    if(matches > 4)
+                    if(matches >2 & (decoded.user.name != users[i].name)) 
                         a.push(users[i])
                 }
         });
