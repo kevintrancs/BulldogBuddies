@@ -34,7 +34,7 @@ public class Profile extends AppCompatActivity{
     private String mToken;
     private String mName;
     private User mUser;
-    private Friend[] all_users;
+    private User[] all_users;
     private TextView tv_name;
     private TextView tv_token;
     private ListView popUpListView;
@@ -61,6 +61,8 @@ public class Profile extends AppCompatActivity{
                         .build();
 
                 RetroInterfaces friendsInterface = retrofit.create(RetroInterfaces.class);
+
+
                 /** TESTING FUNCTIONS - GET FRIENDS - PASS
 
                 Call<ServerResponse> response = friendsInterface.getFriends(mToken);
@@ -113,6 +115,71 @@ public class Profile extends AppCompatActivity{
                 }
                 });
                  */
+
+
+                /**  TESTING FUNCTIONS - GETMYREQUESTS - PASS GOOD SHIT
+                 *
+                Call<ServerResponse> response = friendsInterface.getMyRequests(mToken);
+                response.enqueue(new Callback<ServerResponse>() {
+                    @Override
+                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                        ServerResponse resp = response.body();
+                        if(resp.getSuccess()){
+                            all_users = resp.getFriends();
+                            ArrayList<Friend> aList= new ArrayList<Friend>(Arrays.asList(all_users));
+                            DisplayMetrics metrics = getResources().getDisplayMetrics();
+                            int width = metrics.widthPixels;
+                            int height = metrics.heightPixels;
+                            final Dialog dialog = new Dialog(Profile.this);
+                            dialog.setContentView(R.layout.pop_up);
+                            dialog.setTitle("My Requests");
+                            popUpListView= dialog.findViewById(R.id.list_friends);
+                            ArrayAdapter<User>adapter = new ArrayAdapter(Profile.this,android.R.layout.simple_list_item_1, aList);
+                            popUpListView.setAdapter(adapter);
+                            dialog.show();
+                            dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
+                        }
+                        else{
+                            Snackbar.make(findViewById(R.id.ap),"Donezo", Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ServerResponse> call, Throwable t) {
+                        Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
+                    }
+                });
+                */
+                Call<ServerResponse> response = friendsInterface.getMyMatches(mToken);
+                response.enqueue(new Callback<ServerResponse>() {
+                    @Override
+                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                        ServerResponse resp = response.body();
+                        if(resp.getSuccess()){
+                            all_users = resp.getUsers();
+                            ArrayList<User> aList= new ArrayList<User>(Arrays.asList(all_users));
+                            DisplayMetrics metrics = getResources().getDisplayMetrics();
+                            int width = metrics.widthPixels;
+                            int height = metrics.heightPixels;
+                            final Dialog dialog = new Dialog(Profile.this);
+                            dialog.setContentView(R.layout.pop_up);
+                            dialog.setTitle("My Requests");
+                            popUpListView= dialog.findViewById(R.id.list_friends);
+                            ArrayAdapter<User>adapter = new ArrayAdapter(Profile.this,android.R.layout.simple_list_item_1, aList);
+                            popUpListView.setAdapter(adapter);
+                            dialog.show();
+                            dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
+                        }
+                        else{
+                            Snackbar.make(findViewById(R.id.ap),"Donezo", Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ServerResponse> call, Throwable t) {
+                        Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 

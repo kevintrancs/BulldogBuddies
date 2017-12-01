@@ -34,6 +34,12 @@ public interface RetroInterfaces {
     @GET("friends")
     Call<ServerResponse> getFriends(@Header("x-access-token") String token);
 
+    @GET("myRequests")
+    Call<ServerResponse> getMyRequests(@Header("x-access-token") String token);
+
+    @GET("getMatches")
+    Call<ServerResponse> getMyMatches(@Header("x-access-token") String token);
+
 
 
 }

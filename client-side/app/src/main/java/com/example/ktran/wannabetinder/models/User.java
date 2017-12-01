@@ -10,7 +10,8 @@ public class User {
     private String department;
     private String phone;
     private int[] survey_data;
-    private String[] friends;
+    private User[] friends;
+    private User[] mathces;
 
     public User(String name) {
         this.name = name;
@@ -68,11 +69,11 @@ public class User {
         this.survey_data = survey_results;
     }
 
-    public String[] getFriends() {
+    public User[] getFriends() {
         return friends;
     }
 
-    public void setFriends(String[] friends) {
+    public void User(User[] friends) {
         this.friends = friends;
     }
 }

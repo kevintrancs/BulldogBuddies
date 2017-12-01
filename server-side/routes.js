@@ -25,7 +25,8 @@ apiRoutes.get('/myRequests',function(req, res){
             }
             User.getFriends(decoded.user, {"myFriends.status": Status.Pending}, function(err, result){
                 return res.json({
-                    "Pending": result
+                    success:true,
+                    friends: result
                 });
             });
          
@@ -300,8 +301,8 @@ apiRoutes.get('/getMatches', function(req, res){
                     message: 'Failed to authenticate token.' 
                 });   
             }
-            User.find({}, function(err, users){
-                for(var i = 0; i < users.length-1; i++){
+            User.find({name: -decoded.user.name}, function(err, users){
+                for(var i = 0; i < users.length; i++){
                     var matches = 0;
                     for(var j = 0; j < decoded.user.survey_results.length-1; j++){
                         if(users[i].survey_results[j] == decoded.user.survey_results[j]){
@@ -312,30 +313,20 @@ apiRoutes.get('/getMatches', function(req, res){
                         a.push(users[i])
                 }
         });
-
-        User.findById(decoded.user._id, function(err, self){ // Update user matches on each call
-            if(err)
-                throw err;
-            user.matches = a;
-            user.save(function(err, zz){
-                if(err)
-                  throw err;
-            });
-        });
-
-        User.findById(decoded.user._id).populate('matches').exec(function (err, user) {
+        User.findById(decoded.user._id).populate('matches').exec(function (err, self) {
           if (err)
             throw err;
           else {// FLAW SAVE BEFORE THE POPULATE move when you have time
-              user.matches = a;
-              user.save(function(err, zz){
+            self.matches = a;
+            self.save(function(err, zz){
                   if(err)
                     throw err;
+
               });
             return res.json({
                 success: true,
                 message: "This works?",
-                ms: user.matches
+                users: self.matches
             });
           }
       });
