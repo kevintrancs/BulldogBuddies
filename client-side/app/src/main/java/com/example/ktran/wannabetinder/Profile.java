@@ -105,7 +105,6 @@ public class Profile extends AppCompatActivity{
                         if(resp.getSuccess()){
                             matched_users = resp.getUsers();
                             ArrayList<User> aList= new ArrayList<User>(Arrays.asList(matched_users));
-
                             DisplayMetrics metrics = getResources().getDisplayMetrics();
                             int width = metrics.widthPixels;
                             int height = metrics.heightPixels;
@@ -113,7 +112,6 @@ public class Profile extends AppCompatActivity{
                             dialog.setContentView(R.layout.pop_up);
                             dialog.setTitle("My Requests");
                             popUpListView= dialog.findViewById(R.id.list_friends);
-
 
                             UserAdapter adapter = new UserAdapter(Profile.this, aList);
                             popUpListView.setAdapter(adapter);

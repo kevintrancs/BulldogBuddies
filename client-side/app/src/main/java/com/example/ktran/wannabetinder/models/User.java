@@ -11,7 +11,8 @@ public class User {
     private String phone;
     private int[] survey_data;
     private User[] friends;
-    private User[] mathces;
+    private User[] matches;
+
 
     public User(String name) {
         this.name = name;

@@ -8,23 +8,14 @@
     android:padding="16dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
-    android:id="@+id/image"
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_marginRight="10dp"
-    app:roundAsCircle="true"/>
-
-
-    <Button
-        android:id="@+id/childButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="Add Me" />
-
+        android:id="@+id/drew"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginRight="10dp"
+        app:roundAsCircle="true"/>
 
     <TextView
-        android:id="@+id/childTextView"
+        android:id="@+id/bigName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/image"
@@ -34,7 +25,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/m_perc"
+        android:id="@+id/phone_number"
         android:layout_below="@+id/childTextView"
         android:layout_alignLeft="@+id/childTextView"
         android:layout_width="wrap_content"

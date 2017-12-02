@@ -2,6 +2,7 @@ package com.example.ktran.wannabetinder.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -12,8 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.R;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
@@ -43,20 +44,25 @@ public class UserAdapter extends ArrayAdapter<User> {
         }
         TextView tvName = convertView.findViewById(R.id.childTextView);
         Button add_btn = convertView.findViewById(R.id.childButton);
-
-        tvName.setText("Matched With: " + user.getName());
+        Uri uri = Uri.parse("http://weknowyourdreams.com/images/picture/picture-12.jpg");
+        SimpleDraweeView simpleDraweeView = convertView.findViewById(R.id.image);
+        simpleDraweeView.setImageURI(uri);
+        tvName.setText(user.getName());
         add_btn.setText("Add");
+        TextView matchPercent = convertView.findViewById(R.id.m_perc);
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final String mToken = mSharedPreferences.getString("myToken","");
+        Gson gson = new Gson();
+        String json = mSharedPreferences.getString("myUser", "");
+        final User mUser = gson.fromJson(json, User.class);
+
+       Log.d("test", " "+mUser.getSurvey_results());
+
+        matchPercent.setText("");
 
         add_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {
-
-                mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                final String mToken = mSharedPreferences.getString("myToken","");
-                Gson gson = new Gson();
-                String json = mSharedPreferences.getString("myUser", "");
-                final User mUser = gson.fromJson(json, User.class);
-
-
 
                 OkHttpClient client = new OkHttpClient.Builder()
                         .connectTimeout(10, TimeUnit.SECONDS)
