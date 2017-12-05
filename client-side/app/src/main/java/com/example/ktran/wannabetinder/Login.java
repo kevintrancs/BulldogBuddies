@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +95,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
             @Override
             public void onResponse(Call<ServerResponse> call, retrofit2.Response<ServerResponse> response) {
                 ServerResponse resp = response.body();
-                Snackbar.make(getView(), resp.getMessage() + ", token: " + resp.getjsonToken(), Snackbar.LENGTH_LONG).show();
+                Log.d("ERROR", resp.getMessage() + "   " + resp.getjsonToken());
                 progress.setVisibility(View.INVISIBLE);
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -118,7 +119,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
             public void onFailure(Call<ServerResponse> call, Throwable t) {
 
                 progress.setVisibility(View.INVISIBLE);
-                Snackbar.make(getView(), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
+                Log.d("ERROR", t.getCause() +  "");
             }
         });
     }

@@ -13,6 +13,16 @@ public class ServerResponse {
     private Friend friend;
     private Friend[] friends;
 
+    public int[] getSurvey_data() {
+        return survey_data;
+    }
+
+    public void setSurvey_data(int[] survey_data) {
+        this.survey_data = survey_data;
+    }
+
+    private int[] survey_data;
+
     public Friend getFriend() {
         return friend;
     }
