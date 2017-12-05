@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.Friend;
+import com.example.ktran.wannabetinder.models.FriendAdapter;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
@@ -50,6 +51,7 @@ public class Profile extends AppCompatActivity{
         initSharedPreferences();
         loadProfile();
 
+        //view all friends
         ImageButton find_friends_btn  = findViewById(R.id.add_friend);
         find_friends_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +73,7 @@ public class Profile extends AppCompatActivity{
                                     dialog.setContentView(R.layout.pop_up);
                                     dialog.setTitle("All Users");
                                     popUpListView= dialog.findViewById(R.id.list_friends);
-                                    ArrayAdapter<User>adapter = new ArrayAdapter(Profile.this,android.R.layout.simple_list_item_1, aList);
+                                    FriendAdapter adapter = new FriendAdapter(Profile.this, aList);
                                     popUpListView.setAdapter(adapter);
                                     dialog.show();
                                     dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
@@ -90,6 +92,7 @@ public class Profile extends AppCompatActivity{
             }
         });
 
+        //view matches
         TextView match_btn = findViewById(R.id.match_me);
         match_btn.setOnClickListener(new View.OnClickListener() {
 
@@ -131,6 +134,7 @@ public class Profile extends AppCompatActivity{
             }
         });
 
+        // View Requested
         TextView req_btn = findViewById(R.id.find_requested);
         req_btn.setOnClickListener(new View.OnClickListener() {
 
@@ -153,7 +157,7 @@ public class Profile extends AppCompatActivity{
                             dialog.setContentView(R.layout.pop_up);
                             dialog.setTitle("My Requests");
                             popUpListView= dialog.findViewById(R.id.list_friends);
-                            ArrayAdapter<User>adapter = new ArrayAdapter(Profile.this,android.R.layout.simple_list_item_1, aList);
+                            FriendAdapter adapter = new FriendAdapter(Profile.this, aList);
                             popUpListView.setAdapter(adapter);
                             dialog.show();
                             dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
@@ -208,14 +212,14 @@ public class Profile extends AppCompatActivity{
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 ServerResponse resp = response.body();
+                Log.d("ERROR", "Working");
                 Snackbar.make(findViewById(R.id.ap), resp.getMessage() + ", Sucessful:" + resp.getSuccess(), Snackbar.LENGTH_LONG).show();
                 tv_name.setText(resp.getMessage());
-                tv_token.setText(mToken);
+                tv_token.setText("Phone: " + resp.getuser().getPhone() + " Department: " + resp.getuser().getDepartment());
             }
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Snackbar.make(findViewById(R.id.ap), t.getCause() + " shits busted", Snackbar.LENGTH_LONG).show();
-
+                Log.d("ERROR", "TEST" + t.getCause());
             }
         });
     }

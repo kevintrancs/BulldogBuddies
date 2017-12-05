@@ -2,6 +2,7 @@ package com.example.ktran.wannabetinder.models;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,12 @@ public class FriendAdapter extends ArrayAdapter<Friend> {
     public View getView(int position, View convertView, ViewGroup parent) {
         final User user = getItem(position).getFriend();
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.add_friend_row, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.friend_row, parent, false);
         }
         TextView tvName = convertView.findViewById(R.id.bigName);
         TextView tvPhone = convertView.findViewById(R.id.phone_number);
+
+        Log.d("TEST", " " + user.getName());
 
         tvName.setText(user.getName());
         tvPhone.setText((user.getPhone()));

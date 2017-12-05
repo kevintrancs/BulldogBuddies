@@ -9,8 +9,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/drew"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginRight="10dp"
         app:roundAsCircle="true"/>
 
@@ -18,22 +18,21 @@
         android:id="@+id/bigName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/image"
-        android:singleLine="true"
-        android:textSize="16dp"
+        android:layout_toRightOf="@+id/drew"
         android:text="stuff"
+        android:textSize="16dp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/phone_number"
-        android:layout_below="@+id/childTextView"
-        android:layout_alignLeft="@+id/childTextView"
+        android:layout_toRightOf="@+id/bigName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp" />
+        android:textSize="16dp" />
 
     <View android:background="#CCC"
         android:layout_width="fill_parent"
-        android:layout_height="0.5dp" />
+        android:layout_height="0.5dp"
+        android:id="@+id/view" />
 
 </RelativeLayout>
