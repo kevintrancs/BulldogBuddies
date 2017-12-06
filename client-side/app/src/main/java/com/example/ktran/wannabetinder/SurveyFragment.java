@@ -124,6 +124,8 @@ public class SurveyFragment extends android.app.Fragment  {
                 //progress.setVisibility(View.INVISIBLE);
                 if(resp.getSuccess()){
                     Snackbar.make(getView(), "Regististratoin is successful!", Snackbar.LENGTH_LONG).show();
+                    //TODO: insert username into firebase
+
 
                 }else{
                     Snackbar.make(getView(), "Something is wrongs", Snackbar.LENGTH_LONG).show();

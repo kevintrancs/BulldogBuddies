@@ -89,6 +89,8 @@ public class Register extends android.app.Fragment implements View.OnClickListen
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString("reg_user",new Gson().toJson(user));
+        //TODO: tets
+        editor.putString("user_name_firebase", new Gson().toJson(name));
         editor.commit();
 
         goToSurvey();

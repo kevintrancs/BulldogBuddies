@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "638037325924",
+    "firebase_url": "https://client-side-69fc2.firebaseio.com",
+    "project_id": "client-side-69fc2",
+    "storage_bucket": "client-side-69fc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638037325924:android:c90b55edb059c3ea",
+        "android_client_info": {
+          "package_name": "com.example.ktran.wannabetinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638037325924-rvr7uih69d59rhlb5cek5ksdr5qj5uak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ktran.wannabetinder",
+            "certificate_hash": "af31617269b5ec1c2ac3c7d4c5940476e6348281"
+          }
+        },
+        {
+          "client_id": "638037325924-pmd8aji232g8cg3vaur9egnrptutk4nt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9_yMgaofdifDuA8Ws_YZTAJLCgAIeEhs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638037325924-pmd8aji232g8cg3vaur9egnrptutk4nt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
