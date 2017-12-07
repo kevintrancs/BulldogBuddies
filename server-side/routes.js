@@ -321,12 +321,11 @@ apiRoutes.get('/getMatches', function(req, res){
             self.save(function(err, zz){
                   if(err)
                     throw err;
-
               });
             return res.json({
                 success: true,
                 message: "This works?",
-                users: self.matches
+                users: a
             });
           }
       });
