@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//This activity was a bad attempt at instant messaging
 public class MessagingActivity extends AppCompatActivity {
 
     ListView messagesView;

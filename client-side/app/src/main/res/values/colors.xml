@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="bulldogRed">#d6032a</color>
+    <color name="bulldogBlue">#064cb7</color>
+    <color name="victoryBlue">#0072ce</color>
+    <color name="cinderellaBlue">#6cace4</color>
 </resources>
