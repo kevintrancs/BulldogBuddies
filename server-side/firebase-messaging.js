@@ -1,56 +1,61 @@
 
 //firebase stuff, really don't know what i'm doing
-var admin = require("firebase-admin");
-var serviceAccount = require("client-side-69fc2-firebase-adminsdk-n9ioa-5e6ea9652c.json");
+var firebase= require("firebase-admin");
+var request = require('request');
+var serviceAccount = require("./client-side-69fc2-firebase-adminsdk-n9ioa-5e6ea9652c.json");
+
+//API KEY
+var API_KEY = "AAAAlI38-GQ:APA91bFR0jzeH8EBs3PjfVGzalfIDRyoWO_e7g6cT0VxGFctzcmOIjdxRcSIa-Cax9B-Kdq9LprEgmb_dK3zYj7NqGtITJhdnGapsNGiaOyGTi_oIx90hGV88VzhBP--ah1VHff-rAVh"
 
 //Add the firebase stuff
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+firebase.initializeApp({
+    credential: firebase.credential.cert(serviceAccount),
     databaseURL: "https://client-side-69fc2.firebaseio.com"
   });
+ref = firebase.database().ref();
 
-
-// This registration token comes from the client FCM SDKs.
-var registrationToken = "bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...";
-
-// See the "Defining the message payload" section below for details
-// on how to define a message payload.
-var payload = {
-  data: {
-    score: "850",
-    time: "2:45"
-  }
-};
-
-// Send a message to the device corresponding to the provided
-// registration token.
-admin.messaging().sendToDevice(registrationToken, payload)
-  .then(function(response) {
-    // See the MessagingDevicesResponse reference documentation for
-    // the contents of response.
-    console.log("Successfully sent message:", response);
-  })
-  .catch(function(error) {
-    console.log("Error sending message:", error);
-  });
-
-  //get my token 
-  function getAccessToken() {
-    return new Promise(function(resolve, reject) {
-      var key = require('./client-side-69fc2-firebase-adminsdk-n9ioa-5e6ea9652c.json');
-      var jwtClient = new google.auth.JWT(
-        key.client_email,
-        null,
-        key.private_key,
-        SCOPES,
-        null
-      );
-      jwtClient.authorize(function(err, tokens) {
-        if (err) {
-          reject(err);
-          return;
+function listenForNotificationRequests() {
+    var requests = ref.child('notificationRequests');
+    requests.on('child_added', function(requestSnapshot) {
+      var request = requestSnapshot.val();
+      sendNotificationToUser(
+        request.username, 
+        request.message,
+        function() {
+          requestSnapshot.ref.remove();
         }
-        resolve(tokens.access_token);
-      });
+      );
+    }, function(error) {
+      console.error(error);
+    });
+  };
+  
+  function sendNotificationToUser(username, message, onSuccess) {
+    request({
+      url: 'https://fcm.googleapis.com/fcm/send',
+      method: 'POST',
+      headers: {
+        'Content-Type' :' application/json',
+        'Authorization': 'key='+API_KEY
+      },
+      body: JSON.stringify({
+        notification: {
+          title: message
+        },
+        to : '/topics/user_'+username
+      })
+    }, function(error, response, body) {
+      if (error) { console.error(error); }
+      else if (response.statusCode >= 400) { 
+        console.error('HTTP Error: '+response.statusCode+' - '+response.statusMessage); 
+      }
+      else {
+        onSuccess();
+      }
     });
   }
+
+  // start listening
+  listenForNotificationRequests();
+
+  module.exports = firebase;
