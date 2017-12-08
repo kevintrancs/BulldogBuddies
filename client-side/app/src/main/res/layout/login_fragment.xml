@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D9D9D9"
+    android:background="@color/bulldogRed"
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -45,10 +45,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/user"
+                    android:drawablePadding="10dp"
                     android:drawableTint="#1D3557"
-                    android:singleLine="true"
                     android:hint="Email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -60,12 +61,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:singleLine="true"
                     android:drawableLeft="@drawable/lock"
                     android:drawableTint="#1D3557"
-                    android:inputType="textPassword"
+                    android:drawablePadding="10dp"
                     android:hint="password"
-                     />
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
@@ -74,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:paddingTop="5dp"
-                android:text="Click here to Register?" />
+                android:text="Click here to Register" />
 
 
             <Button
@@ -91,13 +92,13 @@
     </RelativeLayout>
 
     <ProgressBar
-        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:id="@+id/progress"
-        android:visibility="invisible"
-        android:layout_marginTop="10dp"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true" />
+        android:layout_marginTop="10dp"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/user_profile_photo"

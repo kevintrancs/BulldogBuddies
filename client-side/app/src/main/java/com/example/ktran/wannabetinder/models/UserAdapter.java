@@ -14,8 +14,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.R;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -31,6 +37,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserAdapter extends ArrayAdapter<User> {
     private SharedPreferences mSharedPreferences;
+
+    // firebase fields
+    FirebaseDatabase mFirebaseDatabase;
+    // add a reference to the "messages" portion of our database
+    DatabaseReference mMessagesDatabaseReference;
+    // add a reference for a messages listener
+    ChildEventListener mMessagesChildEventListener;
 
     public UserAdapter(Context context, ArrayList<User> users){
         super(context,0, users);
@@ -79,6 +92,7 @@ public class UserAdapter extends ArrayAdapter<User> {
                         ServerResponse resp = response.body();
                         if(resp.getSuccess()){
                             Snackbar.make(v,"Request Sent :)", Snackbar.LENGTH_LONG).show();
+                            sendNotificationToUser("gina", user.getName() + " send you request.");
                         }
                         else{
                             Log.d("req", "fail");
@@ -92,5 +106,18 @@ public class UserAdapter extends ArrayAdapter<User> {
             }
         });
         return convertView;
+    }
+
+    public void sendNotificationToUser(String user, final String message) {
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference notifications =  mFirebaseDatabase.getReference().child("notificationRequests");
+
+        Map notification = new HashMap<>();
+        notification.put("username", user);
+        notification.put("message", message);
+
+        notifications.push().setValue(notification);
+
     }
 }

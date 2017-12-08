@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D9D9D9"
+    android:background="@color/bulldogRed"
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -29,106 +29,108 @@
         android:elevation="4dp"
         android:orientation="vertical"
         android:padding="20dp">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="30dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/et_name"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/user"
-                    android:drawableTint="#1D3557"
-                    android:singleLine="true"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:singleLine="true"
-                    android:drawableLeft="@drawable/lock"
-                    android:inputType="textPassword"
-                    android:drawableTint="#1D3557"
-                    android:hint="password"
-                    />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/et_phone"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:singleLine="true"
-                    android:drawableLeft="@drawable/phone"
-                    android:drawableTint="#1D3557"
-                    android:hint="Phone number"
-                    />
-            </android.support.design.widget.TextInputLayout>
-
-            <Spinner
-                android:id="@+id/spinner"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:entries="@array/major_array"
-                android:spinnerMode="dialog"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_gravity="bottom"/>
+                android:orientation="vertical"
+                android:paddingTop="30dp">
 
-            <TextView
-                android:id="@+id/tv_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:paddingTop="5dp"
-                android:text="Already Registered?" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/user"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="#1D3557"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:drawableLeft="@drawable/lock"
+                        android:drawableTint="#1D3557"
+                        android:drawablePadding="10dp"
+                        android:hint="password"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_phone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:drawableLeft="@drawable/phone"
+                        android:drawableTint="#1D3557"
+                        android:drawablePadding="10dp"
+                        android:hint="Phone number"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:entries="@array/major_array"
+                    android:spinnerMode="dialog" />
+
+                <TextView
+                    android:id="@+id/tv_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:paddingTop="5dp"
+                    android:text="Already Registered?" />
 
 
-            <Button
-                android:id="@+id/btn_register"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="22dp"
-                android:background="#F19F4D"
-                android:text="Register"
-                android:textAllCaps="false"
-                android:textColor="#fff"
-                android:textSize="18sp" />
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="22dp"
+                    android:background="#F19F4D"
+                    android:text="Register"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="18sp" />
 
-         </LinearLayout>
+            </LinearLayout>
         </ScrollView>
     </RelativeLayout>
 
     <ProgressBar
-        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:id="@+id/progress"
-        android:visibility="invisible"
-        android:layout_marginTop="10dp"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true" />
+        android:layout_marginTop="10dp"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/user_profile_photo"

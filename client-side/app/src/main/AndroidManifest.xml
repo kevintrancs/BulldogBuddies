@@ -9,9 +9,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:minSdkVersion="8"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +24,23 @@
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!-- [START firebase_iid_service] -->
+        <service android:name=".models.MyFirebaseInstanceStateIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- [END firebase_iid_service] -->
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".MessagingActivity"
+            android:label="@string/title_activity_messaging"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

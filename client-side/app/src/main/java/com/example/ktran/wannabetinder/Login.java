@@ -19,6 +19,7 @@ import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
@@ -88,7 +89,7 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
                 .build();
 
         RetroInterfaces requestInterface = retrofit.create(RetroInterfaces.class);
-        User user = new User(username, password, null, null, null );
+        final User user = new User(username, password, null, null, null );
         Call<ServerResponse> response = requestInterface.authUser(user);
 
         response.enqueue(new Callback<ServerResponse>() {
@@ -111,6 +112,8 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
                     et_password.setText("");
                 }
                 else {
+                    //TODO: sets the user to subscribe to topic
+                    FirebaseMessaging.getInstance().subscribeToTopic("user_gina");
                     Intent intent = new Intent(getActivity(), Profile.class);
                     startActivity(intent);
                 }

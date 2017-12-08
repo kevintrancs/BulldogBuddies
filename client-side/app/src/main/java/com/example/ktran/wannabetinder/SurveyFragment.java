@@ -20,6 +20,7 @@ import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class SurveyFragment extends android.app.Fragment  {
         if(sobj.equals(""))
             Log.d("Error", "error");
         else
-             user = new Gson().fromJson(sobj, User.class);
+            user = new Gson().fromJson(sobj, User.class);
 
         user.setSurvey_results(array_answer_values);
 
@@ -126,6 +127,7 @@ public class SurveyFragment extends android.app.Fragment  {
                 ServerResponse resp = response.body();
                 //progress.setVisibility(View.INVISIBLE);
                 if(resp.getSuccess()){
+                    Log.d(TAG, "user_" + user.getName());
                     Log.d("SF", "Good");
 
                 }else{

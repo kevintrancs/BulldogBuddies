@@ -89,7 +89,6 @@ public class Register extends android.app.Fragment implements View.OnClickListen
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString("reg_user",new Gson().toJson(user));
-        editor.commit();
 
         goToSurvey();
 
