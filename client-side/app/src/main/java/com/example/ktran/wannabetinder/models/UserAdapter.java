@@ -47,7 +47,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         Uri uri = Uri.parse("http://weknowyourdreams.com/images/picture/picture-12.jpg");
         SimpleDraweeView simpleDraweeView = convertView.findViewById(R.id.image);
         simpleDraweeView.setImageURI(uri);
-        tvName.setText(user.getName());
+        tvName.setText(Constants.getSplitName(user.getName()));
         add_btn.setText("Add");
         TextView matchPercent = convertView.findViewById(R.id.m_perc);
 
@@ -56,8 +56,6 @@ public class UserAdapter extends ArrayAdapter<User> {
         Gson gson = new Gson();
         String json = mSharedPreferences.getString("myUser", "");
         final User mUser = gson.fromJson(json, User.class);
-
-       Log.d("test", " "+mUser.getSurvey_results());
 
         matchPercent.setText("");
 
