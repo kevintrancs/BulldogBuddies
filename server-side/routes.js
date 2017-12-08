@@ -174,34 +174,13 @@ apiRoutes.post('/authenticate', function(req, res) {
 apiRoutes.post('/register', function(req, res){
          var user_to_register = req.body.name;    
         var new_user;
-        /**
-         * Implmement this after testing is done so i'm not frustrated and shit
             var splitString = req.body.name.split("@");
-            if(splitString[1] == "zagmail.gonzaga.edu"){
-            User.findOne({name: req.body.name}, function (err, success) {
-                if (err) {
-                    console.log(err);
-                    res.send(err);
-                }
-                else {
-                    console.log(success);
-                    if (success == null) {
-                        new_user.save(function(err){
-                            if(err)
-                                throw err;
-                            res.json({
-                                success: true,
-                                message: 'Created user ' + req.body.name
-                            });
-                        });
-        
-                    } else {
-                        res.send("Student already present");
-                    }
-                }
-            })
-         }
-         */
+            if(!(splitString[1] == "zagmail.gonzaga.edu")){
+                return res.json({
+                    success:false,
+                    message: "Creation failed"});
+            }
+         
         User.findOne({name: user_to_register}, function (err, success) {
             if (err) {
                 console.log(err);
