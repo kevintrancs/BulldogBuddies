@@ -9,8 +9,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/drew"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:layout_marginRight="10dp"
         app:roundAsCircle="true"/>
 

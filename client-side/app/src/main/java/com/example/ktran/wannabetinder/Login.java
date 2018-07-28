@@ -49,10 +49,10 @@ public class Login extends android.app.Fragment implements View.OnClickListener 
 
     private void initViews(View view) {
         btn_login = (AppCompatButton)view.findViewById(R.id.btn_login);
-        tv_register = (TextView)view.findViewById(R.id.tv_register);
-        et_email = (EditText)view.findViewById(R.id.et_email);
-        et_password = (EditText)view.findViewById(R.id.et_password);
-        progress = (ProgressBar)view.findViewById(R.id.progress);
+        tv_register = view.findViewById(R.id.tv_register);
+        et_email = view.findViewById(R.id.et_email);
+        et_password = view.findViewById(R.id.et_password);
+        progress = view.findViewById(R.id.progress);
         btn_login.setOnClickListener(this);
         tv_register.setOnClickListener(this);
     }

@@ -9,14 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.ktran.wannabetinder.models.Constants;
 import com.example.ktran.wannabetinder.models.Friend;
 import com.example.ktran.wannabetinder.models.FriendAdapter;
+import com.example.ktran.wannabetinder.models.RequestAdapter;
 import com.example.ktran.wannabetinder.models.RetroInterfaces;
 import com.example.ktran.wannabetinder.models.ServerResponse;
 import com.example.ktran.wannabetinder.models.User;
@@ -163,7 +162,7 @@ public class Profile extends AppCompatActivity{
                             dialog.setContentView(R.layout.pop_up);
                             dialog.setTitle("My Requests");
                             popUpListView= dialog.findViewById(R.id.list_friends);
-                            FriendAdapter adapter = new FriendAdapter(Profile.this, aList);
+                            RequestAdapter adapter = new RequestAdapter(Profile.this, aList);
                             popUpListView.setAdapter(adapter);
                             dialog.show();
                             dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
@@ -220,7 +219,7 @@ public class Profile extends AppCompatActivity{
                 ServerResponse resp = response.body();
                 Log.d("ERROR", "Working");
                 Snackbar.make(findViewById(R.id.ap), resp.getMessage() + ", Sucessful:" + resp.getSuccess(), Snackbar.LENGTH_LONG).show();
-                tv_name.setText(resp.getMessage());
+                tv_name.setText(Constants.getSplitName(resp.getMessage()));
                 tv_token.setText("Phone: " + resp.getuser().getPhone() + " Department: " + resp.getuser().getDepartment());
             }
             @Override

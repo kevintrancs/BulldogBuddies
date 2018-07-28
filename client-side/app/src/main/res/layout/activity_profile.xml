@@ -48,16 +48,16 @@
 
             <ImageButton
                 android:id="@+id/add_friend"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignTop="@+id/logout"
                 android:layout_toStartOf="@+id/logout"
-                android:src="@drawable/better_add" />
+                android:src="@drawable/add_user" />
 
             <ImageButton
                 android:id="@+id/logout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
@@ -134,7 +134,7 @@
                 android:gravity="center"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="a" />
+                android:text="Sick Feature" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -147,7 +147,7 @@
                 android:gravity="center"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="b" />
+                android:text="Even cool feature" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -158,7 +158,7 @@
                 android:gravity="center"
                 android:elevation="4dp"
                 android:padding="20dp"
-                android:text="c" />
+                android:text="Meh Feature" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
